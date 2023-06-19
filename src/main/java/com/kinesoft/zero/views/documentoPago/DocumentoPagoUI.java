@@ -108,43 +108,34 @@ public abstract class DocumentoPagoUI extends WindowsView {
 
 
 		documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getProductotoSring,"Producto");
-     //   documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getCantidad,"Cantidad");
 
-/*
-		documentoPagoDetalleGridView.addComponentColumn(DocumentoPagoDetalle->{
+
+
+
+    //   documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getCantidad,"Cantidad");
+
+
+
+
+
+
+		documentoPagoDetalleGridView.addComponentColumn(detalle -> {
+
+
+
+
+			//	NumerText numerText = detalle.getNumerText();
 			onTotal();
-			return DocumentoPagoDetalle.getNumerText();
 
-
-
+			return detalle.getNumerText();
 		}).setHeader("Cantidad");
-
-
-*/
-        documentoPagoDetalleGridView.addComponentColumn(detalle -> {
-            NumerText numerText = detalle.getNumerText();
-
-            numerText.addValueChangeListener(event -> {
-                int cantidad = (int) Math.round(numerText.getValue());
-                detalle.setCantidad(cantidad);
-                detalle.setTotal(detalle.getPrecio().multiply(new BigDecimal(cantidad)));
-
-                onTotal(); // Actualizar el total al cambiar la cantidad
-
-            });
-
-            return numerText;
-        }).setHeader("Cantidad");
-
-
-
-
 
 
 
 
 		documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getPrecio,"Precio");
-		//documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getTotal,"Total");
+
+
 
 		columnaTotales=documentoPagoDetalleGridView.addComponentColumn(DocumentoPagoDetalle->{
 			LabelView lbl= new LabelView();
@@ -153,9 +144,11 @@ public abstract class DocumentoPagoUI extends WindowsView {
 		})	.setHeader("Total").setFooter("0");
 
 
+	//	documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getTotal,"Total");
 
 
 		dateFecha.setValue(LocalDate.now());
+
 
 
 
@@ -169,17 +162,21 @@ public abstract class DocumentoPagoUI extends WindowsView {
 	public void intiListener() {
 		btnCerrar.addClickListener(e->{
 			this.closeDialog();
-			
-			
+
+
 		});
 		btnGrabar.addClickListener(e -> onSave());
 		btnCliente.addClickListener(e->{onSeleccionCliente();});
 		btnProducto.addClickListener(e->{onSeleccionaProducto();});
 		chboxSerie.addValueChangeListener(e->{onCambiarSerie();});
 
-
-		dataDelGrid.addItemCountChangeListener(e ->
+/*
+		documentoPagoDetalleGridView.addItemCountChangeListener(e ->
 				Notification.show(" " + e.getItemCount() + " items available"));
+*/
+
+
+
 
 	};
 
@@ -193,6 +190,8 @@ public abstract class DocumentoPagoUI extends WindowsView {
 		pnlObciones.setWidthFull();
 		documentoPagoDetalleGridView.setWidthFull();
 
+
+
 	};
 
 
@@ -203,7 +202,7 @@ public abstract class DocumentoPagoUI extends WindowsView {
 
 
 
-	
+
 	public abstract void onSeleccionCliente();
 
 	public abstract void onSeleccionaProducto();
@@ -211,6 +210,8 @@ public abstract class DocumentoPagoUI extends WindowsView {
 	public abstract void onCambiarSerie();
 
 	public abstract String onTotal() ;
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.kinesoft.zero.views.documentoPago;
 
+import com.kinesoft.zero.components.NumerText;
 import com.kinesoft.zero.model.*;
 import com.kinesoft.zero.servicesImpl.*;
 import com.kinesoft.zero.views.cliente.ClientesView;
@@ -16,194 +17,180 @@ import java.util.List;
 public class DocumentoPagoView extends DocumentoPagoUI {
 
 
-	List<ItemVenta> listaDeItemsVenta = new ArrayList<>();
+    List<ItemVenta> listaDeItemsVenta = new ArrayList<>();
 
 
-	ItemVenta itemVenta = new ItemVenta();
-	Cliente cliente;
+    ItemVenta itemVenta = new ItemVenta();
+    Cliente cliente;
 
-	Producto producto;
+    Producto producto;
 
-	Mesa mesa;
-	List<Serie> listaDeSeries = new ArrayList<>();
-	Integer correlativoSerie;
-	List<Cliente>listaDeClientes = new ArrayList<>();
+    Mesa mesa;
+    List<Serie> listaDeSeries = new ArrayList<>();
+    Integer correlativoSerie;
+    List<Cliente> listaDeClientes = new ArrayList<>();
 
-	public Integer id_Detalle=1;
-	public boolean save;
+    public Integer id_Detalle = 1;
+    public boolean save;
 
-	public DocumentoPagoView() {
-	}
+    public DocumentoPagoView() {
+    }
 
-	public DocumentoPagoView(DocumentoPago documentoPago) {
-		this.save = documentoPago == null;
-		initData(documentoPago);
-	}
-
-
-	public void initData(DocumentoPago documentoPago) {
-
-		try {
-			listaDeSeries=SerieServiceImpl.listarSeries(null);
-			chboxSerie.setItems(listaDeSeries);
-			chboxSerie.setValue(listaDeSeries.get(0));
-			onCambiarSerie();
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+    public DocumentoPagoView(DocumentoPago documentoPago) {
+        this.save = documentoPago == null;
+        initData(documentoPago);
+    }
 
 
-	}
+    public void initData(DocumentoPago documentoPago) {
+
+        try {
+            listaDeSeries = SerieServiceImpl.listarSeries(null);
+            chboxSerie.setItems(listaDeSeries);
+            chboxSerie.setValue(listaDeSeries.get(0));
+            onCambiarSerie();
+            documentoPagoDetalleGridView.setlist(listadeDocumentoPagoDetalle);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
-	@Override
-	public String onCerrar() {
-		this.closeDialog();
-		return null;
-	}
-
-	@Override
-	public String onSave() {
-		return null;
-	}
+    }
 
 
-	@Override
-	public void onSeleccionCliente() {
-		ClientesView view= new ClientesView();
+    @Override
+    public String onCerrar() {
+        this.closeDialog();
+        return null;
+    }
 
-		//	vistaSeleccion.setMinWidth("500px");
-		view.setSizeFull();
-
-		view.showDialog(view);
-
-
-		view.btnSeleccionar.addClickListener(e->{
-			if(view.grid.getValue()!=null) {
-				txtCliente.setText(view.grid.getValue().getNombre());
-				cliente= view.grid.getValue();
-				view.closeDialog();
-			}
+    @Override
+    public String onSave() {
+        return null;
+    }
 
 
-		});
-
-	}
-
-	@Override
-	public void onSeleccionaProducto() {
-	//	dataDelGrid.refreshAll();
-
-		ProductosView view= new ProductosView();
+    @Override
+    public void onSeleccionCliente() {
+        ClientesView view = new ClientesView();
 
 		//	vistaSeleccion.setMinWidth("500px");
-		view.setSizeFull();
+        view.setSizeFull();
 
-		view.showDialog(view);
-
-
-		view.btnSeleccionar.addClickListener(e->{
-			if(view.grid.getValue()!=null) {
-				Producto productoSeleccionado = view.grid.getValue();
-				System.out.println("Producto seleccionado: " + productoSeleccionado.getNombre());
-
-				DocumentoPagoDetalle nuevoDetalle = new DocumentoPagoDetalle(id_Detalle,
-						productoSeleccionado,1, productoSeleccionado.getPrecio(), productoSeleccionado.getPrecio());
+        view.showDialog(view);
 
 
+        view.btnSeleccionar.addClickListener(e -> {
+            if (view.grid.getValue() != null) {
+                txtCliente.setText(view.grid.getValue().getNombre());
+                cliente = view.grid.getValue();
+                view.closeDialog();
+            }
 
 
-				System.out.println("Producto en el detalle documento : " + nuevoDetalle.getProducto().getNombre());
+        });
+
+    }
+
+    @Override
+    public void onSeleccionaProducto() {
+		//	dataDelGrid.refreshAll();
+
+        ProductosView view = new ProductosView();
+
+		//	vistaSeleccion.setMinWidth("500px");
+        view.setSizeFull();
+
+        view.showDialog(view);
 
 
+        view.btnSeleccionar.addClickListener(e -> {
+            if (view.grid.getValue() != null) {
+                Producto productoSeleccionado = view.grid.getValue();
 
-				listadeDocumentoPagoDetalle.add(nuevoDetalle);
+                agregarDetalleProducto(productoSeleccionado);
 
-
-				System.out.println("Nombres de los productos en la lista:");
-				for (DocumentoPagoDetalle detalle : listadeDocumentoPagoDetalle) {
-					System.out.println(detalle.getProducto().getNombre());
-				}
-				//dataDelGrid.refreshAll();
-
-				System.out.println("Antes de refreshAll(): " + listadeDocumentoPagoDetalle.size());
-				dataDelGrid.refreshAll();
-				System.out.println("Después de refreshAll(): " + listadeDocumentoPagoDetalle.size());
+                view.closeDialog();
+                id_Detalle++;
+            }
 
 
+        });
 
 
+    }
 
 
+    public void agregarDetalleProducto(Producto productoSeleccionado) {
+        System.out.println("Producto seleccionado: " + productoSeleccionado.getNombre());
+		DocumentoPagoDetalle nuevoDetalle = new DocumentoPagoDetalle(
+				id_Detalle,
+				productoSeleccionado,
+				1,
+				productoSeleccionado.getPrecio(),
+				productoSeleccionado.getPrecio(),
+				documentoPagoDetalleGridView
+		);
 
 
+        dataDelGrid.addItem(nuevoDetalle);
+    //    nuevoDetalle.setNumerText(new NumerText());
+      //  nuevoDetalle.getNumerText().setValue(1.0);
 
-				//producto= view.grid.getValue();
-
-				view.closeDialog();
-				id_Detalle++;
-			}
-
-
-		});
+	//	documentoPagoDetalleGridView.getDataProvider().refreshAll();
+		id_Detalle++;  // Incrementa el id_Detalle después de agregar el detalle
 
 
-	}
+    }
 
-	@Override
-	public void onCambiarSerie() {
-		try {
-			correlativoSerie=DocumentoPagoServiceImpl.devolverCorrelativo(chboxSerie.getValue())+1;
-			System.out.println("El correlativo que toca es "+correlativoSerie);
-			txfCorrelativo.setValue(correlativoSerie.toString());
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-
-	}
-
-	@Override
-	public String onTotal() {
-
-		BigDecimal totalDinero=BigDecimal.ZERO;
-		for(DocumentoPagoDetalle item : listadeDocumentoPagoDetalle){
+    @Override
+    public void onCambiarSerie() {
+        try {
+            correlativoSerie = DocumentoPagoServiceImpl.devolverCorrelativo(chboxSerie.getValue()) + 1;
+            System.out.println("El correlativo que toca es " + correlativoSerie);
+            txfCorrelativo.setValue(correlativoSerie.toString());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
-			if (item.total!=null) {
-				totalDinero=totalDinero.add(item.total);
-				System.out.println("El total n° "+totalDinero);
+    }
 
-			}
+    @Override
+    public String onTotal() {
 
-
-
-			//	this.grid.getDataProvider().refreshItem(item);
-
-		}
+        BigDecimal totalDinero = BigDecimal.ZERO;
+        for (DocumentoPagoDetalle item : listadeDocumentoPagoDetalle) {
 
 
+            if (item.total != null) {
+                totalDinero = totalDinero.add(item.total);
+
+                System.out.println("El total n° " + totalDinero);
+
+            }
 
 
+            //this.grid.getDataProvider().refreshItem(item);
+
+        }
 
 
-		System.out.println("El valor total de el dinero es "+totalDinero);
-		//this.grid.getDataProvider().refreshAll();
-		columnaTotales.setFooter(""+totalDinero);
-		dataDelGrid.refreshAll();
+        System.out.println("El valor total de el dinero es " + totalDinero);
+        //this.grid.getDataProvider().refreshAll();
+        columnaTotales.setFooter("" + totalDinero);
+        //dataDelGrid.refreshAll();
 
-		return ""+totalDinero;
-
-		//return "hola";
+        documentoPagoDetalleGridView.getDataProvider().refreshAll();
 
 
+        return "" + totalDinero;
 
-	}
+        //return "hola";
 
 
-
-
+    }
 
 
 }

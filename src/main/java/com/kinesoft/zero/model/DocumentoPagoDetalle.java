@@ -17,7 +17,10 @@ public class DocumentoPagoDetalle {
     public BigDecimal precio;
     public BigDecimal total;
     public GridView<DocumentoPagoDetalle> grid;
-    private NumerText numerText = new NumerText();
+
+
+
+    public NumerText numerText ;
 
 
 
@@ -33,17 +36,18 @@ public class DocumentoPagoDetalle {
 
     }
 
-    public DocumentoPagoDetalle(Integer id,Producto producto, Integer cantidad, BigDecimal precio, BigDecimal total) {
+    public DocumentoPagoDetalle(Integer id,Producto producto, Integer cantidad, BigDecimal precio, BigDecimal total,GridView grid) {
 
         this.id = id;
-
+        this.grid= grid;
         this.producto = producto;
         this.cantidad = cantidad;
+        this.numerText= new NumerText();
         this.numerText.setValue(Double.valueOf(cantidad));
 
         this.precio = precio;
         this.total = total;
-/*
+
         numerText.addValueChangeListener(e->{
             this.cantidad=(int) Math.round(numerText.getValue());
             this.total   = precio.multiply(new BigDecimal(this.cantidad));
@@ -51,12 +55,13 @@ public class DocumentoPagoDetalle {
 
             this.numerText.setValue(Double.valueOf(this.cantidad));
 
-           // this.grid.getDataProvider().refreshItem(this);
+            this.grid.getDataProvider().refreshItem(this);
+            if (this.total!=null) {}
 
 
         });
 
-*/
+
     }
     public DocumentoPagoDetalle() {
 
@@ -116,24 +121,27 @@ public class DocumentoPagoDetalle {
         this.total = total;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        DocumentoPagoDetalle other = (DocumentoPagoDetalle) obj;
-        return id == other.id;
-    }
 
     public NumerText getNumerText() {
         return numerText;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DocumentoPagoDetalle that)) return false;
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    public void setNumerText(NumerText numerText) {
+        this.numerText = numerText;
+    }
 }
+
+
