@@ -30,11 +30,11 @@ import java.util.List;
 
 public abstract class DocumentoPagoUI extends WindowsView {
 
-	HorizontalLayout pnlObciones 			= new HorizontalLayout();
-	HorizontalLayout pnlInteraccion 		= new HorizontalLayout();
+	HorizontalLayout pnlObciones = new HorizontalLayout();
+	HorizontalLayout pnlInteraccion = new HorizontalLayout();
 
-	LabelView txtCliente 					= new LabelView();
-	Button btnCliente						= new Button("Cliente");
+	LabelView txtCliente = new LabelView();
+	Button btnCliente = new Button("Cliente");
 
 	ComboBox <Serie> chboxSerie = new ComboBox<Serie>();
 	TextField txfCorrelativo= new TextField();
@@ -43,21 +43,20 @@ public abstract class DocumentoPagoUI extends WindowsView {
 	List<DocumentoPagoDetalle> listadeDocumentoPagoDetalle= new ArrayList<>();
 
 
+	DatePicker dateFecha = new DatePicker();
 
-	DatePicker dateFecha					= new DatePicker();
-
-	Checkbox chxPagado						= new Checkbox("Pagado");
-
-
-	Button btnProducto 						= new Button("Productos");
+	Checkbox chxPagado = new Checkbox("Pagado");
 
 
-	Button btnImportarPedido				= new Button("Importar pedido");
+	Button btnProducto = new Button("Productos");
 
 
-	private HorizontalLayout body 			= new HorizontalLayout();
+	Button btnImportarPedido = new Button("Importar pedido");
 
-	private VerticalLayout pnlFacturado		= new VerticalLayout();
+
+	private HorizontalLayout body = new HorizontalLayout();
+
+	private VerticalLayout pnlFacturado = new VerticalLayout();
 
 	TextField txtValorVenta = new TextField("Valor de venta");
 	TextField txtIgv = new TextField("Igv");
@@ -65,15 +64,8 @@ public abstract class DocumentoPagoUI extends WindowsView {
 	TextField txtNetoPagar = new TextField("Neto Pagar");
 
 
-
-
-
-
-
-
-	Button btnGrabar 						= new Button("Grabar");
-	Button btnCerrar 						= new Button("Cerrar");
-
+	Button btnGrabar = new Button("Grabar");
+	Button btnCerrar = new Button("Cerrar");
 
 
 	GridView<DocumentoPagoDetalle>documentoPagoDetalleGridView = new GridView<>(DocumentoPagoDetalle.class);
@@ -91,20 +83,17 @@ public abstract class DocumentoPagoUI extends WindowsView {
 	public void initDataUI() {
 
 
-
-
 		pnlObciones.add(
-						btnCliente,
-						txtCliente,chboxSerie,txfCorrelativo,
-						dateFecha,
-						chxPagado,btnCerrar
+				btnCliente,
+				txtCliente,chboxSerie,txfCorrelativo
 
-						);
+				,btnCerrar
+
+		);
 
 
-		pnlInteraccion.add(btnProducto,btnImportarPedido);
+		pnlInteraccion.add(dateFecha,chxPagado,btnProducto,btnImportarPedido);
 		pnlFacturado.add(txtValorVenta,txtIgv,txtMontoIgv,txtNetoPagar);
-
 
 
 		documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getProductotoSring,"Producto");
@@ -115,41 +104,45 @@ public abstract class DocumentoPagoUI extends WindowsView {
     //   documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getCantidad,"Cantidad");
 
 
-
-
-
-
 		documentoPagoDetalleGridView.addComponentColumn(detalle -> {
 
 
+			NumerText numerText = detalle.getNumerText();
+			numerText.addValueChangeListener(e->{
+
+				if(numerText.getValue()==0){
+
+					System.out.println("hOLA ESTOY EN 0");
+					listadeDocumentoPagoDetalle.remove(detalle);
+					dataDelGrid.refreshAll();
 
 
-			//	NumerText numerText = detalle.getNumerText();
-			onTotal();
 
-			return detalle.getNumerText();
+				}
+
+
+				onTotal();
+			});
+
+
+			return numerText;
 		}).setHeader("Cantidad");
 
 
-
-
 		documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getPrecio,"Precio");
-
 
 
 		columnaTotales=documentoPagoDetalleGridView.addComponentColumn(DocumentoPagoDetalle->{
 			LabelView lbl= new LabelView();
 			lbl.setText(DocumentoPagoDetalle.getTotal().toString());
 			return lbl;
-		})	.setHeader("Total").setFooter("0");
+		}).setHeader("Total").setFooter("0");
 
 
-	//	documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getTotal,"Total");
+		//	documentoPagoDetalleGridView.addCol(DocumentoPagoDetalle::getTotal,"Total");
 
 
 		dateFecha.setValue(LocalDate.now());
-
-
 
 
 		body.add(documentoPagoDetalleGridView,pnlFacturado);
@@ -157,6 +150,12 @@ public abstract class DocumentoPagoUI extends WindowsView {
 		add(pnlObciones,pnlInteraccion, body/*,select,addNewItem,newItemField,itemCountSpan*/ );
 
 
+		txtIgv.setValue("18%");
+
+		txtValorVenta.setReadOnly(true);
+		txtIgv.setReadOnly(true);
+		txtMontoIgv.setReadOnly(true);
+		txtNetoPagar.setReadOnly(true);
 	}
 
 	public void intiListener() {
@@ -176,8 +175,6 @@ public abstract class DocumentoPagoUI extends WindowsView {
 */
 
 
-
-
 	};
 
 
@@ -191,16 +188,12 @@ public abstract class DocumentoPagoUI extends WindowsView {
 		documentoPagoDetalleGridView.setWidthFull();
 
 
-
 	};
 
 
 	public abstract String onCerrar();
 
 	public abstract String onSave();
-
-
-
 
 
 	public abstract void onSeleccionCliente();

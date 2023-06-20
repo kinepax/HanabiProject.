@@ -280,6 +280,7 @@ public class PedidoView extends PedidoUI {
 		//System.out.println("El valor total de el dinero es "+totalDinero);
 		//this.grid.getDataProvider().refreshAll();
 		columnaTotales.setFooter(""+totalDinero);
+
 		return ""+totalDinero;
 
 		

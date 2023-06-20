@@ -109,10 +109,16 @@ public class DocumentoPagoView extends DocumentoPagoUI {
             if (view.grid.getValue() != null) {
                 Producto productoSeleccionado = view.grid.getValue();
 
-                agregarDetalleProducto(productoSeleccionado);
+                if(!listadeDocumentoPagoDetalle.stream().anyMatch(item->item.getProducto().equals(productoSeleccionado))){
+                    agregarDetalleProducto(productoSeleccionado);
+                    id_Detalle++;
+
+                }
 
                 view.closeDialog();
-                id_Detalle++;
+
+
+
             }
 
 
@@ -140,7 +146,7 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
 	//	documentoPagoDetalleGridView.getDataProvider().refreshAll();
 		id_Detalle++;  // Incrementa el id_Detalle después de agregar el detalle
-
+        onTotal();
 
     }
 
@@ -159,17 +165,26 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
     @Override
     public String onTotal() {
+        BigDecimal valorVenta = BigDecimal.ZERO;
+        BigDecimal IGV = BigDecimal.ZERO;
 
-        BigDecimal totalDinero = BigDecimal.ZERO;
+        BigDecimal valorMontoIGV = BigDecimal.ZERO;
+
+        BigDecimal netoPagar = BigDecimal.ZERO;
+
+
         for (DocumentoPagoDetalle item : listadeDocumentoPagoDetalle) {
 
 
             if (item.total != null) {
-                totalDinero = totalDinero.add(item.total);
+                netoPagar = netoPagar.add(item.total);
 
-                System.out.println("El total n° " + totalDinero);
+                System.out.println("El total n° " + netoPagar);
 
             }
+
+
+
 
 
             //this.grid.getDataProvider().refreshItem(item);
@@ -177,15 +192,30 @@ public class DocumentoPagoView extends DocumentoPagoUI {
         }
 
 
-        System.out.println("El valor total de el dinero es " + totalDinero);
+        System.out.println("El valor total de el dinero es " + netoPagar);
         //this.grid.getDataProvider().refreshAll();
-        columnaTotales.setFooter("" + totalDinero);
-        //dataDelGrid.refreshAll();
+        columnaTotales.setFooter("" + netoPagar);
+        dataDelGrid.refreshAll();
 
-        documentoPagoDetalleGridView.getDataProvider().refreshAll();
+      //  documentoPagoDetalleGridView.getDataProvider().refreshAll();
 
 
-        return "" + totalDinero;
+
+
+
+        txtNetoPagar.setValue(""+netoPagar);
+
+        valorVenta=netoPagar.divide(new BigDecimal(1.18),2);
+        txtValorVenta.setValue(""+valorVenta);
+
+        valorMontoIGV=netoPagar.subtract(valorVenta);
+        txtMontoIgv.setValue(""+valorMontoIGV);
+
+
+
+
+
+        return "" + netoPagar;
 
         //return "hola";
 
