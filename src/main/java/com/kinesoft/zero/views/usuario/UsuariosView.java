@@ -1,16 +1,11 @@
 package com.kinesoft.zero.views.usuario;
 
+import com.kinesoft.zero.model.Usuario;
+import com.kinesoft.zero.servicesImpl.UsuarioServiceImpl;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.kinesoft.zero.model.Cliente;
-import com.kinesoft.zero.model.Usuario;
-import com.kinesoft.zero.servicesImpl.ClienteServiceImpl;
-import com.kinesoft.zero.servicesImpl.UsuarioServiceImpl;
-import com.kinesoft.zero.views.cliente.ClienteView;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 
 public class UsuariosView extends UsuariosUI {
 	

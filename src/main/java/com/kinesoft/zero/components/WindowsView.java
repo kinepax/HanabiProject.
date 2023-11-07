@@ -44,6 +44,8 @@ public  class WindowsView extends VerticalLayout   {
     public  void showDialog() {
         dialog = new Dialog(this) {
         };
+
+
         
         dialog.open();
     }

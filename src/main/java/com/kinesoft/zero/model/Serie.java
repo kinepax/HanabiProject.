@@ -1,6 +1,5 @@
 package com.kinesoft.zero.model;
 
-import javax.naming.directory.SearchResult;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

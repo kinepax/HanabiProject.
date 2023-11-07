@@ -1,10 +1,10 @@
 package com.kinesoft.zero.servicesImpl;
 
 import com.kinesoft.zero.components.WindowsView;
-import com.kinesoft.zero.model.*;
+import com.kinesoft.zero.model.DocumentoPago;
+import com.kinesoft.zero.model.DocumentoPagoDetalle;
 import com.kinesoft.zero.server.Server;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +52,14 @@ public final class DocumentoPagoDetalleServiceImpl extends WindowsView {
 		Connection conexion = Server.conectar();
 		try {
 			PreparedStatement procedimientoInsertarDetallePedido = 
-					conexion.prepareStatement("Insert into documento_pago_detalle (documento_pago,producto,cantidad,precio,total)"
-					+ " values (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+					conexion.prepareStatement("Insert into documento_pago_detalle (documento_pago,producto_id,producto,cantidad,precio,total)"
+					+ " values (?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 			procedimientoInsertarDetallePedido.setInt			(1,documentoPagoDetalle.getDocumento_pago().getId());
 			procedimientoInsertarDetallePedido.setInt			(2,documentoPagoDetalle.getProducto().getId());
-			procedimientoInsertarDetallePedido.setInt			(3,documentoPagoDetalle.getCantidad());
-			procedimientoInsertarDetallePedido.setBigDecimal	(4,documentoPagoDetalle.getPrecio() );
-			procedimientoInsertarDetallePedido.setBigDecimal	(5,documentoPagoDetalle.getTotal());
+			procedimientoInsertarDetallePedido.setString		(3,documentoPagoDetalle.getProducto().getNombre());
+			procedimientoInsertarDetallePedido.setInt			(4,documentoPagoDetalle.getCantidad());
+			procedimientoInsertarDetallePedido.setBigDecimal	(5,documentoPagoDetalle.getPrecio() );
+			procedimientoInsertarDetallePedido.setBigDecimal	(6,documentoPagoDetalle.getTotal());
 
 			procedimientoInsertarDetallePedido.executeUpdate();
 			

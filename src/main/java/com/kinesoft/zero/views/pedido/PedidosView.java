@@ -1,15 +1,13 @@
 package com.kinesoft.zero.views.pedido;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.kinesoft.zero.model.Pedido;
 import com.kinesoft.zero.model.PedidoDetalle;
 import com.kinesoft.zero.servicesImpl.PedidoDetalleServiceImpl;
 import com.kinesoft.zero.servicesImpl.PedidoServiceImpl;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PedidosView extends PedidosUI {
 

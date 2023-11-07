@@ -1,10 +1,7 @@
 package com.kinesoft.zero.views.documentoPago;
 
 import com.kinesoft.zero.model.DocumentoPago;
-import com.kinesoft.zero.model.PedidoDetalle;
 import com.kinesoft.zero.servicesImpl.DocumentoPagoServiceImpl;
-import com.kinesoft.zero.servicesImpl.PedidoDetalleServiceImpl;
-import com.kinesoft.zero.views.pedido.PedidoView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

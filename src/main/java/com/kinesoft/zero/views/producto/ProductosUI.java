@@ -10,10 +10,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 public abstract class ProductosUI extends WindowsView {
 
 	public GridView<Producto> grid = new GridView<>(Producto.class,true);
-
-	// GridView<Producto>grid= new GridView<>(Producto.class);
-	//Grid<Producto>grid= new Grid<>(Producto.class);
-
 	Button btnAgregar = new Button("Agregar");
 	Button btnEditar = new Button("Editar");
 	Button btnEliminar = new Button("Eliminar");

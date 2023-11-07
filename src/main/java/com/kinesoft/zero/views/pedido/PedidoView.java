@@ -1,31 +1,14 @@
 package com.kinesoft.zero.views.pedido;
 
+import com.kinesoft.zero.components.WindowsView;
+import com.kinesoft.zero.model.*;
+import com.kinesoft.zero.servicesImpl.*;
+import com.kinesoft.zero.views.cliente.ClientesView;
+
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-
-
-import com.kinesoft.zero.components.WindowsView;
-import com.kinesoft.zero.model.Cliente;
-import com.kinesoft.zero.model.ItemVenta;
-import com.kinesoft.zero.model.Mesa;
-import com.kinesoft.zero.model.Pedido;
-import com.kinesoft.zero.model.PedidoDetalle;
-import com.kinesoft.zero.model.Producto;
-import com.kinesoft.zero.servicesImpl.ClienteServiceImpl;
-import com.kinesoft.zero.servicesImpl.ItemVentaServiceImpl;
-import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
-import com.kinesoft.zero.servicesImpl.PedidoDetalleServiceImpl;
-import com.kinesoft.zero.servicesImpl.PedidoServiceImpl;
-import com.kinesoft.zero.servicesImpl.ProductoServiceImpl;
-import com.kinesoft.zero.views.cliente.ClienteView;
-import com.kinesoft.zero.views.cliente.ClientesView;
-import com.vaadin.flow.component.grid.GridSingleSelectionModel;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 
 
 public class PedidoView extends PedidoUI {
@@ -147,77 +130,72 @@ public class PedidoView extends PedidoUI {
 		if(!cliente.equals(null) && !mesa.equals(null)) {
 			
 			
-			WindowsView.ConfirmarListener view= new WindowsView.ConfirmarListener()
-			{	
-				public void onConfirmacionSeleccionada(boolean respuesta) {
-					
-					   if (respuesta) {
-						   
-							Pedido pedidoCab= new Pedido(cliente,mesa,new BigDecimal(onTotal()) , "P");
-							int id_pedido_cab=PedidoServiceImpl.save(pedidoCab);
-							pedidoCab.setId(id_pedido_cab);
-							List <PedidoDetalle> pedidosDetalle= new ArrayList<PedidoDetalle>();
-							
-							System.out.println("---------------------");
-							System.out.println(pedidoCab.getId());
-							System.out.println(pedidoCab.getCliente().getNombre());
-							System.out.println(pedidoCab.getTotal());
-							System.out.println(pedidoCab.getEstado());
-							System.out.println("---------------------");
+			WindowsView.ConfirmarListener view= respuesta -> {
 
-							
-							
-							for(ItemVenta item : gridItemVenta.getList()){
-								
+				   if (respuesta) {
 
-								if (item.cantidad>0) {
-									
-									System.out.println("---------------------");
+						Pedido pedidoCab= new Pedido(cliente,mesa,new BigDecimal(onTotal()) , "P");
+						int id_pedido_cab=PedidoServiceImpl.save(pedidoCab);
+						pedidoCab.setId(id_pedido_cab);
+						List <PedidoDetalle> pedidosDetalle= new ArrayList<PedidoDetalle>();
 
-									System.out.println(item.getProducto().getNombre());
-									System.out.println(item.getCantidad());
-									System.out.println(item.getPrecio());
-									System.out.println(item.getTotal());
-									System.out.println("---------------------");
-									PedidoDetalle pedidoDetalle = new PedidoDetalle(pedidoCab,item.getProducto(),item.getCantidad(),
-											item.getPrecio(),item.getTotal()
-											);
-									
-									pedidosDetalle.add(pedidoDetalle);
-									PedidoDetalleServiceImpl.guardar(pedidoDetalle);
-									System.out.println("Se grabo correctamente");
-									
-									
-									
-									
-									
-									WindowsView alerta = new WindowsView();
-									alerta.setHeight("10px");
-									alerta.setWidth("10px");
-									alerta.onError("Se grabo correctamente");	
-									
-									
-									closeDialog();
-									
-									
-								}
-							//	this.grid.getDataProvider().refreshItem(item);		
-								
-							}				        }
-					   
-					   
-					   
-					   
-					   else {
-				            // El usuario seleccionó "No"
-				            // No hacer nada
-				        }	
-					
-				}
-				
-				
-					};
-			
+						System.out.println("---------------------");
+						System.out.println(pedidoCab.getId());
+						System.out.println(pedidoCab.getCliente().getNombre());
+						System.out.println(pedidoCab.getTotal());
+						System.out.println(pedidoCab.getEstado());
+						System.out.println("---------------------");
+
+
+
+						for(ItemVenta item : gridItemVenta.getList()){
+
+
+							if (item.cantidad>0) {
+
+								System.out.println("---------------------");
+
+								System.out.println(item.getProducto().getNombre());
+								System.out.println(item.getCantidad());
+								System.out.println(item.getPrecio());
+								System.out.println(item.getTotal());
+								System.out.println("---------------------");
+								PedidoDetalle pedidoDetalle = new PedidoDetalle(pedidoCab,item.getProducto(),item.getCantidad(),
+										item.getPrecio(),item.getTotal()
+										);
+
+								pedidosDetalle.add(pedidoDetalle);
+								PedidoDetalleServiceImpl.guardar(pedidoDetalle);
+								System.out.println("Se grabo correctamente");
+
+
+
+
+
+								WindowsView alerta = new WindowsView();
+								alerta.setHeight("10px");
+								alerta.setWidth("10px");
+								alerta.onError("Se grabo correctamente");
+
+
+								closeDialog();
+
+
+							}
+						//	this.grid.getDataProvider().refreshItem(item);
+
+						}				        }
+
+
+
+
+				   else {
+						// El usuario seleccionó "No"
+						// No hacer nada
+					}
+
+			};
+
 	WindowsView.onPreguntarGrabar("¿Está seguro de que desea continuar?", view);
 					
 

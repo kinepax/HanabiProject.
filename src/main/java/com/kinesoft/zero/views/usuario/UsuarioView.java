@@ -1,20 +1,15 @@
 package com.kinesoft.zero.views.usuario;
 
-import java.math.BigDecimal;
+import com.kinesoft.zero.model.Mesa;
+import com.kinesoft.zero.model.Usuario;
+import com.kinesoft.zero.model.Usuario_Mesas;
+import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
+import com.kinesoft.zero.servicesImpl.UsuarioServiceImpl;
+import com.kinesoft.zero.servicesImpl.Usuario_MesasServiceImpl;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.kinesoft.zero.model.Usuario;
-import com.kinesoft.zero.model.Usuario_Mesas;
-import com.kinesoft.zero.model.ItemVenta;
-import com.kinesoft.zero.model.Mesa;
-import com.kinesoft.zero.model.Producto;
-import com.kinesoft.zero.servicesImpl.ClienteServiceImpl;
-import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
-import com.kinesoft.zero.servicesImpl.ProductoServiceImpl;
-import com.kinesoft.zero.servicesImpl.UsuarioServiceImpl;
-import com.kinesoft.zero.servicesImpl.Usuario_MesasServiceImpl;
 
 public class UsuarioView extends UsuarioUI {
 

@@ -1,12 +1,12 @@
 package com.kinesoft.zero.views.documentoPago;
 
-import com.kinesoft.zero.components.NumerText;
+import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.*;
-import com.kinesoft.zero.servicesImpl.*;
+import com.kinesoft.zero.servicesImpl.DocumentoPagoDetalleServiceImpl;
+import com.kinesoft.zero.servicesImpl.DocumentoPagoServiceImpl;
+import com.kinesoft.zero.servicesImpl.SerieServiceImpl;
 import com.kinesoft.zero.views.cliente.ClientesView;
 import com.kinesoft.zero.views.producto.ProductosView;
-import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import com.vaadin.flow.component.notification.Notification;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -67,7 +67,101 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
     @Override
     public String onSave() {
+
+        if(cliente != null && !listadeDocumentoPagoDetalle.isEmpty() ){
+
+            System.out.println("Los datos estan correctos");
+            String condicionPago= chxPagado.getValue() ? "E" : "C";
+            Boolean cancelado=  chxPagado.getValue() ? true : false;
+            BigDecimal montoPagado =  chxPagado.getValue() ? new BigDecimal(txtNetoPagar.getValue().toString()) : new BigDecimal(0.0) ;
+
+
+
+            WindowsView.ConfirmarListener view= respuesta->{
+
+                if(respuesta){
+
+                    System.out.println("Se supone que le diste que si");
+                    DocumentoPago documentoPagoCab = new DocumentoPago(
+                            chboxSerie.getValue(),
+                            Integer.parseInt(txfCorrelativo.getValue()),
+                            dateFecha.getValue(),
+                            condicionPago,
+                            cliente,
+                            new BigDecimal(txtValorVenta.getValue().toString()),
+                            new BigDecimal(18.00),
+                            new BigDecimal(txtMontoIgv.getValue().toString()),
+                            new BigDecimal(txtNetoPagar.getValue().toString()),
+                            "B",
+                            cancelado,
+                            new Usuario(1,"Paulo","kinepax","123456"),
+                            montoPagado,
+                            ""
+
+
+                    );
+
+                    int idDocumentoPagoCab = DocumentoPagoServiceImpl.save(documentoPagoCab);
+                    documentoPagoCab.setId(idDocumentoPagoCab);
+
+
+                    for(DocumentoPagoDetalle item : listadeDocumentoPagoDetalle){
+
+                        DocumentoPagoDetalle docuDetalle = new DocumentoPagoDetalle(
+                                documentoPagoCab,
+                                item.getProducto(),
+                                item.getCantidad(),
+                                item.getPrecio(),
+                                item.getTotal()
+                                                                                   );
+                        DocumentoPagoDetalleServiceImpl.guardar(docuDetalle);
+
+
+
+
+
+                    }
+
+
+                    WindowsView alerta = new WindowsView();
+                    alerta.setHeight("10px");
+                    alerta.setWidth("10px");
+                    alerta.onError("Se grabo correctamente");
+
+
+                    closeDialog();
+
+
+                }
+                else{
+                    System.out.println("Se supone que le diste que no");
+
+
+                }
+
+
+
+            };
+            WindowsView.onPreguntarGrabar("¿Está seguro de que desea continuar?", view);
+
+        }
+
+        else{
+
+
+
+            System.out.println("Algo te falta");
+        }
+
+
+
+
+
         return null;
+
+
+
+
     }
 
 
@@ -75,7 +169,7 @@ public class DocumentoPagoView extends DocumentoPagoUI {
     public void onSeleccionCliente() {
         ClientesView view = new ClientesView();
 
-		//	vistaSeleccion.setMinWidth("500px");
+        //	vistaSeleccion.setMinWidth("500px");
         view.setSizeFull();
 
         view.showDialog(view);
@@ -95,11 +189,11 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
     @Override
     public void onSeleccionaProducto() {
-		//	dataDelGrid.refreshAll();
+        //	dataDelGrid.refreshAll();
 
         ProductosView view = new ProductosView();
 
-		//	vistaSeleccion.setMinWidth("500px");
+        //	vistaSeleccion.setMinWidth("500px");
         view.setSizeFull();
 
         view.showDialog(view);
@@ -130,22 +224,22 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
     public void agregarDetalleProducto(Producto productoSeleccionado) {
         System.out.println("Producto seleccionado: " + productoSeleccionado.getNombre());
-		DocumentoPagoDetalle nuevoDetalle = new DocumentoPagoDetalle(
-				id_Detalle,
-				productoSeleccionado,
-				1,
-				productoSeleccionado.getPrecio(),
-				productoSeleccionado.getPrecio(),
-				documentoPagoDetalleGridView
-		);
+        DocumentoPagoDetalle nuevoDetalle = new DocumentoPagoDetalle(
+                id_Detalle,
+                productoSeleccionado,
+                1,
+                productoSeleccionado.getPrecio(),
+                productoSeleccionado.getPrecio(),
+                documentoPagoDetalleGridView
+        );
 
 
         dataDelGrid.addItem(nuevoDetalle);
     //    nuevoDetalle.setNumerText(new NumerText());
       //  nuevoDetalle.getNumerText().setValue(1.0);
 
-	//	documentoPagoDetalleGridView.getDataProvider().refreshAll();
-		id_Detalle++;  // Incrementa el id_Detalle después de agregar el detalle
+        //	documentoPagoDetalleGridView.getDataProvider().refreshAll();
+        id_Detalle++;  // Incrementa el id_Detalle después de agregar el detalle
         onTotal();
 
     }

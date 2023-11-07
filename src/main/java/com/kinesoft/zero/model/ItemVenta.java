@@ -1,11 +1,10 @@
 package com.kinesoft.zero.model;
 
-import java.math.BigDecimal;
-import java.util.Objects;
-
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.NumerText;
-import com.vaadin.flow.component.grid.Grid;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 
 public class ItemVenta {
 //datos de control

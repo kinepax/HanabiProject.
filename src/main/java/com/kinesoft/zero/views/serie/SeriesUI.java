@@ -2,7 +2,6 @@ package com.kinesoft.zero.views.serie;
 
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.WindowsView;
-import com.kinesoft.zero.model.Producto;
 import com.kinesoft.zero.model.Serie;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

@@ -1,12 +1,9 @@
 package com.kinesoft.zero.views.producto;
 
 import com.kinesoft.zero.components.WindowsView;
-import com.kinesoft.zero.model.Producto;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
 public abstract class ProductoUI extends WindowsView {

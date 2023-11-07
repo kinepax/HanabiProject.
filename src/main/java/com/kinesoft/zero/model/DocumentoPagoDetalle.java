@@ -4,9 +4,6 @@ import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.NumerText;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class DocumentoPagoDetalle {
 
@@ -67,6 +64,15 @@ public class DocumentoPagoDetalle {
 
 
     }
+
+    public DocumentoPagoDetalle(DocumentoPago documento_pago, Producto producto, Integer cantidad, BigDecimal precio, BigDecimal total) {
+        this.documento_pago = documento_pago;
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.total = total;
+    }
+
 
 
     public Integer getId() {

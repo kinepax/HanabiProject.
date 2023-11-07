@@ -1,11 +1,10 @@
 package com.kinesoft.zero.components;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.function.ValueProvider;
-import com.vaadin.flow.data.provider.ListDataProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GridView<T>  extends Grid <T>{

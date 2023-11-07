@@ -3,9 +3,7 @@ package com.kinesoft.zero.views.documentoPago;
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.DocumentoPago;
-import com.kinesoft.zero.model.Pedido;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public abstract class DocumentosPagoUI extends WindowsView {

@@ -1,32 +1,20 @@
 package com.kinesoft.zero.views.pedido;
 
-import java.math.BigDecimal;
-
-import com.vaadin.flow.component.checkbox.Checkbox;
-import org.springframework.web.servlet.View;
-
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.LabelView;
-import com.kinesoft.zero.components.NumerText;
 import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Cliente;
 import com.kinesoft.zero.model.ItemVenta;
 import com.kinesoft.zero.model.Mesa;
 import com.kinesoft.zero.model.Pedido;
-import com.kinesoft.zero.model.Producto;
-import com.kinesoft.zero.views.cliente.ClienteView;
-import com.kinesoft.zero.views.cliente.ClientesView;
-import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.charts.model.Label;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
+
+import java.math.BigDecimal;
 
 public abstract class PedidoUI extends WindowsView {
 
@@ -114,8 +102,10 @@ public abstract class PedidoUI extends WindowsView {
 		body.setWidthFull();
 
 		comboCliente.setWidthFull();
+		pnlObciones.setAlignItems(Alignment.BASELINE);
 		pnlObciones.setWidthFull();
 		gridItemVenta.setWidthFull();
+
 
 	};
 

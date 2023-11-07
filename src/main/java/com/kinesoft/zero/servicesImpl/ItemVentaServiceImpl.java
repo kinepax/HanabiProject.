@@ -22,7 +22,7 @@ public final class ItemVentaServiceImpl extends WindowsView {
 	public static List<ItemVenta> listaDeItemsEnVenta() throws SQLException {
 
 		List<ItemVenta> listaDeItemsDeVenta 	= new ArrayList<ItemVenta>();
-		List<Producto> 	listaDeProductos 		= new ArrayList<Producto>();
+		List<Producto> 	listaDeProductos;
 
 		listaDeProductos						= ProductoServiceImpl.listarProductos();
 		int idParaItemVenta = 1;

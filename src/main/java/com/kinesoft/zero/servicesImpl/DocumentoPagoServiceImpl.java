@@ -1,9 +1,7 @@
 package com.kinesoft.zero.servicesImpl;
 
 import com.kinesoft.zero.components.WindowsView;
-import com.kinesoft.zero.model.Cliente;
 import com.kinesoft.zero.model.DocumentoPago;
-import com.kinesoft.zero.model.Pedido;
 import com.kinesoft.zero.model.Serie;
 import com.kinesoft.zero.server.Server;
 
@@ -33,7 +31,7 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 							//Optiene el nombre del cliente
 							SerieServiceImpl.listarSeries(String.valueOf(resultados.getInt("serie"))).get(0),
 							resultados.getInt("numero"),
-							resultados.getDate("fecha"),
+							resultados.getDate("fecha").toLocalDate(),
 							resultados.getString("condicion_pago"),
 							ClienteServiceImpl.listarClientes(resultados.getString("cliente")).get(0),
 
@@ -46,9 +44,6 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 							UsuarioServiceImpl.listarUsuarios(resultados.getString("usuario")).get(0),
 							new BigDecimal(resultados.getString("monto_pagado")),
 							resultados.getString("firma_electronica")
-
-
-
 
 
 					)
@@ -72,9 +67,13 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 					" cancelado, usuario, monto_pagado, firma_electronica)"
 
 					+ " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+
+			Date fechaDateSql = Date.valueOf(documentoPago.getFecha());
+
+
 			psIsertar.setInt(1,documentoPago.getSerie().getId());
 			psIsertar.setInt(2,documentoPago.getNumero());
-			psIsertar.setDate(3, (Date) documentoPago.getFecha());
+			psIsertar.setDate(3, fechaDateSql);
 			psIsertar.setString(4,documentoPago.getCondicion_pago());
 			psIsertar.setInt(5,documentoPago.getCliente().getId());
 			psIsertar.setBigDecimal(6,documentoPago.getValor_venta());
@@ -86,7 +85,6 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 			psIsertar.setInt(12,documentoPago.getUsuario().getId());
 			psIsertar.setBigDecimal(13,documentoPago.getMonto_pagado());
 			psIsertar.setString(14,documentoPago.getFirma_electronica());
-
 
 
 			psIsertar.executeUpdate();
@@ -114,7 +112,10 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 
 		Connection conexion = Server.conectar();
 		Statement state = conexion.createStatement();
-		ResultSet resultados = state.executeQuery("SELECT IFNULL(MAX(serie), 0) AS ultimo_correlativo FROM documento_pago WHERE serie = "+serie.getId());
+		String consulta = "SELECT IFNULL(MAX(numero), 0) AS ultimo_correlativo FROM documento_pago WHERE serie = "+serie.getId();
+		ResultSet resultados = state.executeQuery(consulta);
+
+
 		Integer ultimoCorrelativo=0;
 
 		while (resultados.next()) {
@@ -122,8 +123,10 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 			ultimoCorrelativo= resultados.getInt("ultimo_correlativo");
 		}
 
+		System.out.println(consulta);
 		conexion.close();
 		return ultimoCorrelativo;
+
 
 	}
 

@@ -1,12 +1,8 @@
 package com.kinesoft.zero.views.serie;
 
-import com.kinesoft.zero.model.Producto;
 import com.kinesoft.zero.model.Serie;
 import com.kinesoft.zero.model.Usuario;
-import com.kinesoft.zero.servicesImpl.ProductoServiceImpl;
 import com.kinesoft.zero.servicesImpl.SerieServiceImpl;
-
-import java.math.BigDecimal;
 
 public class SerieView extends  SerieUI{
 

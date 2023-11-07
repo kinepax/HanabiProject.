@@ -3,7 +3,6 @@ package com.kinesoft.zero.views.serie;
 import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Serie;
 import com.kinesoft.zero.servicesImpl.SerieServiceImpl;
-import com.kinesoft.zero.views.producto.ProductoView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

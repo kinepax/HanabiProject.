@@ -1,14 +1,7 @@
 package com.kinesoft.zero.views.mesa;
 
-import java.math.BigDecimal;
-
-import com.kinesoft.zero.model.Usuario;
 import com.kinesoft.zero.model.Mesa;
-import com.kinesoft.zero.model.Producto;
-import com.kinesoft.zero.servicesImpl.ClienteServiceImpl;
 import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
-import com.kinesoft.zero.servicesImpl.ProductoServiceImpl;
-import com.kinesoft.zero.servicesImpl.UsuarioServiceImpl;
 
 public class MesaView extends MesaUI {
 

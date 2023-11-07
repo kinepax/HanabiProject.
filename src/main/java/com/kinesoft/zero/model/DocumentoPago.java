@@ -1,7 +1,7 @@
 package com.kinesoft.zero.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class DocumentoPago {
@@ -9,7 +9,7 @@ public class DocumentoPago {
     public Integer id;
     public Serie serie;
     public Integer numero;
-    public Date fecha;
+    public LocalDate fecha;
     public String condicion_pago;
     public Cliente cliente;
     public BigDecimal valor_venta;
@@ -22,7 +22,7 @@ public class DocumentoPago {
     public BigDecimal monto_pagado;
     public String firma_electronica;
 
-    public DocumentoPago(Integer id, Serie serie, Integer numero, Date fecha, String condicion_pago, Cliente cliente, BigDecimal valor_venta, BigDecimal igv, BigDecimal monto_igv, BigDecimal neto_pagar, String estado, Boolean cancelado, Usuario usuario, BigDecimal monto_pagado, String firma_electronica) {
+    public DocumentoPago(Integer id, Serie serie, Integer numero, LocalDate fecha, String condicion_pago, Cliente cliente, BigDecimal valor_venta, BigDecimal igv, BigDecimal monto_igv, BigDecimal neto_pagar, String estado, Boolean cancelado, Usuario usuario, BigDecimal monto_pagado, String firma_electronica) {
         this.id = id;
         this.serie = serie;
         this.numero = numero;
@@ -40,6 +40,22 @@ public class DocumentoPago {
         this.firma_electronica = firma_electronica;
     }
 
+    public DocumentoPago(Serie serie, Integer numero, LocalDate fecha, String condicion_pago, Cliente cliente, BigDecimal valor_venta, BigDecimal igv, BigDecimal monto_igv, BigDecimal neto_pagar, String estado, Boolean cancelado, Usuario usuario, BigDecimal monto_pagado, String firma_electronica) {
+        this.serie = serie;
+        this.numero = numero;
+        this.fecha = fecha;
+        this.condicion_pago = condicion_pago;
+        this.cliente = cliente;
+        this.valor_venta = valor_venta;
+        this.igv = igv;
+        this.monto_igv = monto_igv;
+        this.neto_pagar = neto_pagar;
+        this.estado = estado;
+        this.cancelado = cancelado;
+        this.usuario = usuario;
+        this.monto_pagado = monto_pagado;
+        this.firma_electronica = firma_electronica;
+    }
 
     public Integer getId() {
         return id;
@@ -65,11 +81,11 @@ public class DocumentoPago {
         this.numero = numero;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 

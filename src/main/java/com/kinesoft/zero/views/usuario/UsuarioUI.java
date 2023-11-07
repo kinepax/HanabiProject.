@@ -2,16 +2,12 @@ package com.kinesoft.zero.views.usuario;
 
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.WindowsView;
-import com.kinesoft.zero.model.ItemVenta;
 import com.kinesoft.zero.model.Mesa;
-import com.kinesoft.zero.model.Producto;
 import com.kinesoft.zero.model.Usuario_Mesas;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 
 public abstract class UsuarioUI extends WindowsView {

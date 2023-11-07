@@ -1,16 +1,13 @@
 package com.kinesoft.zero.views.mesa;
 
+import com.kinesoft.zero.model.Mesa;
+import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-import com.kinesoft.zero.model.Mesa;
-import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-
-//@Route(value = "mesas", layout = MainLayout.class)
 public class MesasView extends MesasUI {
 	
 	List<Mesa> listaDeMesas 			= new ArrayList<>();

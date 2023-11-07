@@ -1,16 +1,11 @@
 package com.kinesoft.zero.servicesImpl;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.kinesoft.zero.model.Usuario;
 import com.kinesoft.zero.server.Server;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 

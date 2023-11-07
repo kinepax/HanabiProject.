@@ -2,9 +2,7 @@ package com.kinesoft.zero.views.mesa;
 
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.WindowsView;
-import com.kinesoft.zero.model.Cliente;
 import com.kinesoft.zero.model.Mesa;
-import com.kinesoft.zero.model.Usuario;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 

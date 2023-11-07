@@ -1,19 +1,14 @@
 package com.kinesoft.zero.servicesImpl;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Cliente;
-import com.kinesoft.zero.model.Mesa;
 import com.kinesoft.zero.model.Pedido;
 import com.kinesoft.zero.server.Server;
+
+import java.math.BigDecimal;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class PedidoServiceImpl extends WindowsView {
 

@@ -1,26 +1,19 @@
 package com.kinesoft.zero.main;
 
-import com.kinesoft.zero.views.documentoPago.DocumentosPagoView;
-import com.kinesoft.zero.views.serie.SeriesView;
-import com.vaadin.flow.dom.DomEvent;
-import com.kinesoft.zero.views.cliente.ClienteView;
 import com.kinesoft.zero.views.cliente.ClientesView;
+import com.kinesoft.zero.views.documentoPago.DocumentosPagoView;
 import com.kinesoft.zero.views.mesa.MesasView;
 import com.kinesoft.zero.views.pedido.PedidosView;
 import com.kinesoft.zero.views.producto.ProductosView;
+import com.kinesoft.zero.views.serie.SeriesView;
 import com.kinesoft.zero.views.usuario.UsuariosView;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.VaadinSession;
-import com.vaadin.open.App;
+import com.vaadin.flow.dom.DomEvent;
 
 public class Main extends VerticalLayout {
 
