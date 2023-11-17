@@ -34,9 +34,20 @@ public class DocumentosPagoView extends DocumentosPagoUI {
 
 	@Override
 	public void onRefrescar() {
+		String fechaInicialStr=  fechaInicial.getValue().toString();
+		String fechaFinalStr=  fechaFinal.getValue().toString();
+		String condicion= chbxCondicion.getValue();
+		String cliente = txtCliente.getValue();
+
 
 		try {
-			listadeDocumentosPago = DocumentoPagoServiceImpl.listarDocumentosPago();
+			listadeDocumentosPago = DocumentoPagoServiceImpl.listarDocumentosPago(
+					fechaInicialStr,
+					fechaFinalStr,
+					condicion,
+					cliente
+
+			);
 			grid.setItems(listadeDocumentosPago);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

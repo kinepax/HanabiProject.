@@ -3,8 +3,12 @@ package com.kinesoft.zero.views.cliente;
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Cliente;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+
+import java.awt.*;
 
 public abstract class ClientesUI extends WindowsView {
 
@@ -17,26 +21,40 @@ public abstract class ClientesUI extends WindowsView {
 	public Button btnClose 			= new Button("Cerrar");
 	HorizontalLayout pnlObciones 	= new HorizontalLayout();
 
+	HorizontalLayout pnlFiltros 	= new HorizontalLayout();
+
+	TextField txtDni= new TextField("Dni");
+
+	TextField txtNombre= new TextField("Nombre");
+
+
 	public ClientesUI() {
+		initStyles();
 		initDataUI();
 		initListener();
 	}
+	public void initStyles(){
 
+		pnlFiltros.setAlignItems(Alignment.BASELINE);
+
+	}
 	public void initDataUI() {
 		pnlObciones.add(btnAgregar,
 						btnEditar,
 						btnEliminar,
-						btnSeleccionar,
-						btnRefrescar
-						,btnClose);
-		
-		
-		grid.setColumns("id", "dni", "nombre");
+						btnSeleccionar
 
-		add(pnlObciones, grid);
+						,btnClose);
+
+		pnlFiltros.add(txtDni,txtNombre,btnRefrescar);
+		grid.setColumns("dni", "nombre");
+
+		add(pnlObciones,pnlFiltros, grid);
 		this.setSizeFull();
 
 	}
+
+
 
 	public void initListener() {
 		btnClose		.addClickListener			(e->{	onCerrar();});
@@ -44,6 +62,8 @@ public abstract class ClientesUI extends WindowsView {
 		btnRefrescar	.addClickListener			(e -> onRefrescar());
 		btnEditar		.addClickListener			(e -> onEditar());
 		btnEliminar		.addClickListener			(e -> onEliminar());
+		txtDni			.addKeyUpListener			(Key.ENTER,e->onRefrescar());
+		txtNombre		.addKeyUpListener			(Key.ENTER,e->onRefrescar());
 
 	}
 

@@ -19,8 +19,13 @@ public class Usuario {
 		this.usuario = usuario;
 		this.pass = pass;
 	}
-	
-	
+
+	public Usuario(Integer id,String usuario) {
+		this.id = id;
+		this.usuario = usuario;
+	}
+
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

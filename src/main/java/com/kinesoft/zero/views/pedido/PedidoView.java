@@ -81,7 +81,7 @@ public class PedidoView extends PedidoUI {
 			
 			System.out.println("el  id del pedido es "+pedido.getId().toString());
 			listaDeMesas= MesaServiceImpl.listarMesas(String.valueOf(pedido.getIdMesa()));
-			listaDeClientes=ClienteServiceImpl.listarClientes(String.valueOf(pedido.getCliente().getId()));
+			listaDeClientes=ClienteServiceImpl.listarClientes(String.valueOf(pedido.getCliente().getId()),null);
 			
 			txtCliente.setValue(listaDeClientes.get(0).getNombre());
 			txtCliente.setEnabled(false);
@@ -134,7 +134,7 @@ public class PedidoView extends PedidoUI {
 
 				   if (respuesta) {
 
-						Pedido pedidoCab= new Pedido(cliente,mesa,new BigDecimal(onTotal()) , "P");
+						Pedido pedidoCab= new Pedido(cliente,mesa,new BigDecimal(onTotal()) , "PENDIENTE");
 						int id_pedido_cab=PedidoServiceImpl.save(pedidoCab);
 						pedidoCab.setId(id_pedido_cab);
 						List <PedidoDetalle> pedidosDetalle= new ArrayList<PedidoDetalle>();

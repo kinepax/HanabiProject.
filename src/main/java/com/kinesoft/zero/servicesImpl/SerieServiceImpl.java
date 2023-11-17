@@ -20,13 +20,11 @@ public class SerieServiceImpl  extends WindowsView  {
 		Connection conexion = Server.conectar();
 		Statement state = conexion.createStatement();
 
-		String where = " where id is not null";
-		if (condicion != null) {
-
-			where += " and id= " + condicion;
-
-		}
-		String query="Select * from serie "+ where;
+		String where = " where s.id is not null";
+		where += " and serie like '%" + condicion+"%' ";
+		String query="Select s.id,s.serie,u.id as idUsuario,u.usuario,s.fecha_hora,s.serie_anterior,s.serie_actual,s.operacion from serie  as s " +
+				"inner join usuario as u on " +
+				"s.usuario=u.id "+ where;
 		System.out.println(query);
 		ResultSet resultados = state.executeQuery(query);
 		List<Serie> listaDeSeries = new ArrayList<Serie>();
@@ -37,7 +35,7 @@ public class SerieServiceImpl  extends WindowsView  {
 
 					Integer.parseInt(resultados.getString("id")),
 					resultados.getString("serie"),
-					UsuarioServiceImpl.listarUsuarios(resultados.getString("usuario")).get(0),
+					new Usuario(resultados.getInt("idUsuario"),resultados.getString("usuario")),
 					resultados.getTimestamp("fecha_hora").toLocalDateTime(),
 					resultados.getString("serie_anterior"),
 					resultados.getString("serie_actual"),

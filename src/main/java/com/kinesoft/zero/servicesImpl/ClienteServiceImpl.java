@@ -14,16 +14,14 @@ public  abstract class  ClienteServiceImpl extends WindowsView {
 
 	}
 
-	public static List<Cliente> listarClientes(String condicion) throws SQLException {
+	public static List<Cliente> listarClientes(String dni,String nombres) throws SQLException {
 
 		Connection conexion 		= Server.conectar();
 		Statement state 		= conexion.createStatement();
 		String where 		= " where id is not null";
-		if (condicion != null) {
+			where+=" and dni like '%"+dni+"%' "+
+					" and nombre like '%"+nombres+"%' ";
 
-			where += " and id= " + condicion;
-
-		}
 
 		ResultSet resultados = state.executeQuery("Select * from cliente " + where);
 		List<Cliente> listaDeClientes = new ArrayList<Cliente>();

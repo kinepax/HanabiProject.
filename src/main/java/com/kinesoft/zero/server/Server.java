@@ -8,24 +8,28 @@ import com.kinesoft.zero.components.WindowsView;
 
 
 public final  class Server {
+
 	public static final  String  url ="jdbc:mysql://127.0.0.1/hanabi";
 
 	public static final  String  usuario ="root";
 	public static final  String  contraseña ="";
 
-	public static final  String  driver ="com.mysql.cj.jdbc.Driver";
-	
-	
+
+
 	
 
 	//Direccion de base datos en la nube
-	//public static final  String  urlExterna ="jdbc:mysql://sql10.freemysqlhosting.net:3306/sql10436906";
+/*
+	public static final  String  url ="jdbc:mysql://35.223.236.33/hanabi";
 
-//	public static final  String  usuarioExterno ="sql10436906";
-	//public static final  String  contraseñaExterna ="SkNnQ24YSN";
+	public static final  String  usuario ="root";
+	public static final  String  contraseña ="s1stema5";
 
-	
-	
+*/
+
+	public static final  String  driver ="com.mysql.cj.jdbc.Driver";
+
+
 	public Server() {
 		
 		

@@ -7,52 +7,61 @@
     <artifactId>projectzero</artifactId>
     <name>projectzero</name>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <!--   <packaging>war</packaging>-->
+    <packaging>jar</packaging>
 
-    <properties>
-        <java.version>17</java.version>
-        <vaadin.version>24.1.0</vaadin.version>
-        <selenium.version>4.8.1</selenium.version>
-    </properties>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.5</version>
-    </parent>
+      <properties>
+          <java.version>17</java.version>
+          <vaadin.version>24.1.0</vaadin.version>
+          <selenium.version>4.8.1</selenium.version>
+      </properties>
 
-    <repositories>
-        <repository>
-            <id>Vaadin Directory</id>
-            <url>https://maven.vaadin.com/vaadin-addons</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+      <parent>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-parent</artifactId>
+          <version>3.0.5</version>
+      </parent>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-bom</artifactId>
-                <version>${vaadin.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+      <repositories>
+          <repository>
+              <id>Vaadin Directory</id>
+              <url>https://maven.vaadin.com/vaadin-addons</url>
+              <snapshots>
+                  <enabled>false</enabled>
+              </snapshots>
+          </repository>
+      </repositories>
 
-    <dependencies>
-    <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>8.0.32</version>
-</dependency>
-    
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <!-- Replace artifactId with vaadin-core to use only free components -->
+      <dependencyManagement>
+          <dependencies>
+              <dependency>
+                  <groupId>com.google.cloud.tools</groupId>
+                  <artifactId>appengine-maven-plugin</artifactId>
+                  <version>2.5.0</version>
+              </dependency>
+              <dependency>
+                  <groupId>com.vaadin</groupId>
+                  <artifactId>vaadin-bom</artifactId>
+                  <version>${vaadin.version}</version>
+                  <type>pom</type>
+                  <scope>import</scope>
+              </dependency>
+
+          </dependencies>
+
+      </dependencyManagement>
+
+      <dependencies>
+      <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.32</version>
+  </dependency>
+
+          <dependency>
+              <groupId>com.vaadin</groupId>
+              <!-- Replace artifactId with vaadin-core to use only free components -->
             <artifactId>vaadin-core</artifactId>
         </dependency>
         <dependency>
@@ -84,11 +93,19 @@
             <artifactId>vaadin-testbench-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+          <dependency>
+              <groupId>com.google.cloud.tools</groupId>
+              <artifactId>appengine-maven-plugin</artifactId>
+              <version>2.5.0</version>
+          </dependency>
     </dependencies>
 
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
+
+
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -130,7 +147,10 @@
                             <artifactId>vaadin-dev</artifactId>
                         </exclusion>
                     </exclusions>
+
                 </dependency>
+
+
             </dependencies>
             <build>
                 <plugins>
@@ -146,7 +166,21 @@
                                 <phase>compile</phase>
                             </execution>
                         </executions>
+                        <configuration>
+                            <productionMode>true</productionMode>
+                        </configuration>
                     </plugin>
+
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>appengine-maven-plugin</artifactId>
+                        <version>2.5.0</version>
+                        <configuration>
+                            <projectId>GCLOUD_CONFIG</projectId>
+                            <version>GCLOUD_CONFIG</version>
+                        </configuration>
+                    </plugin>
+
                 </plugins>
             </build>
         </profile>

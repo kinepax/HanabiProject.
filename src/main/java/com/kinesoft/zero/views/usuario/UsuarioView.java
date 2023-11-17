@@ -97,36 +97,38 @@ public class UsuarioView extends UsuarioUI {
 
 	@Override
 	public void onCargar() {
-		
+		/*
 		try {
-			list_mesas=MesaServiceImpl.listarMesas(null);
-			
-			mesas_grid.setlist(list_mesas);
-			
-			
-			list_usuarios_mesas=Usuario_MesasServiceImpl.listarUsuariosMesas(null);
+	///		list_mesas=MesaServiceImpl.listarMesas(null);
+
+		//	mesas_grid.setlist(list_mesas);
+
+
+		//	list_usuarios_mesas=Usuario_MesasServiceImpl.listarUsuariosMesas(null);
 			usuariosxmesas_grid.setlist(list_usuarios_mesas);
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		
 	}
 
 	@Override
 	public void onAgregar() {
+		/*
 		usuario_x_mesa.setMesa(mesas_grid.getValue());
 		usuario_x_mesa.setUser(user);
 		
 		usuario_Mesa_ServiceImpl.guardar(usuario_x_mesa);
 		onCargar();
-
+*/
 	}
 
 	@Override
 	public void onQuitar() {
+		/*
 		usuario_x_mesa=usuariosxmesas_grid.getValue();
 		try {
 			usuario_Mesa_ServiceImpl.eliminar(usuario_x_mesa);
@@ -136,6 +138,9 @@ public class UsuarioView extends UsuarioUI {
 		}
 		
 		onCargar();
+
+
+		 */
 		
 	}
 

@@ -173,6 +173,7 @@ public abstract class DocumentoPagoUI extends WindowsView {
 		btnCliente.addClickListener(e->{onSeleccionCliente();});
 		btnProducto.addClickListener(e->{onSeleccionaProducto();});
 		chboxSerie.addValueChangeListener(e->{onCambiarSerie();});
+		btnImportarPedido.addClickListener(e->{onSeleccionarPedido();});
 
 	};
 
@@ -212,6 +213,8 @@ public abstract class DocumentoPagoUI extends WindowsView {
 	public abstract void onSeleccionCliente();
 
 	public abstract void onSeleccionaProducto();
+	public abstract void onSeleccionarPedido();
+
 
 	public abstract void onCambiarSerie();
 

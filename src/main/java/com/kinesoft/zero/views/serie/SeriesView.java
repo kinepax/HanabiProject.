@@ -38,8 +38,9 @@ public class SeriesView extends SeriesUI{
 
     @Override
     public String onRefrescar() {
+        String serie=  txtSerie.getValue();
         try {
-            series=serieServiceImpl.listarSeries(null);
+            series=serieServiceImpl.listarSeries(serie);
             System.out.println(series.size());
             grid.setItems(series);
         } catch (SQLException e) {

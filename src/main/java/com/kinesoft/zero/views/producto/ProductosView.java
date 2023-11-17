@@ -36,8 +36,10 @@ public class ProductosView extends ProductosUI{
 
 	@Override
 	public String onRefrescar() {
+		String nombre = txtNombre.getValue();
+
 		try {
-			productos=ProductoServiceImpl.listarProductos();
+			productos=ProductoServiceImpl.listarProductos(nombre);
 			System.out.println(productos.size());
 			grid.setItems(productos);
 		} catch (SQLException e) {
@@ -66,6 +68,8 @@ public class ProductosView extends ProductosUI{
 			ProductoView view = new ProductoView(entity);
 			view.setSizeFull();
 			view.showDialog(view);
+
+
 			
 			
 			System.out.println(entity.getNombre());

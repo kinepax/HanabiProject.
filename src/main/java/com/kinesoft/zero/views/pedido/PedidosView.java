@@ -1,7 +1,10 @@
 package com.kinesoft.zero.views.pedido;
 
+import com.kinesoft.zero.dto.PedidoDTO;
+import com.kinesoft.zero.model.Mesa;
 import com.kinesoft.zero.model.Pedido;
 import com.kinesoft.zero.model.PedidoDetalle;
+import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
 import com.kinesoft.zero.servicesImpl.PedidoDetalleServiceImpl;
 import com.kinesoft.zero.servicesImpl.PedidoServiceImpl;
 
@@ -11,8 +14,11 @@ import java.util.List;
 
 public class PedidosView extends PedidosUI {
 
-	List<Pedido> listaDePedidos = new ArrayList<>();
+	List<PedidoDTO> listaDePedidos = new ArrayList<>();
+	List<Mesa> listaDeMesas = new ArrayList<>();
+
 	Pedido pedido = new Pedido();
+
 
 	List<Pedido>listaDePedidoSeleccionado ;
 
@@ -24,8 +30,6 @@ public class PedidosView extends PedidosUI {
 
 	public void initDataView() {
 		onRefrescar();
-
-
 	}
 
 
@@ -41,7 +45,20 @@ public class PedidosView extends PedidosUI {
 	public void onRefrescar() {
 
 		try {
-			listaDePedidos = PedidoServiceImpl.listarPedidos();
+			String fechaInicialStr= fechaInicial.getValue().toString();
+			String fechaFinalStr= fechaFinal.getValue().toString();
+			Integer idMesa= chxboxMesa.getValue().getId();
+			String cliente = txtCliente.getValue().toString();
+			String estado= chboxEstado.getValue();
+
+
+
+			//listaDePedidos = PedidoServiceImpl.listarPedidos();
+			listaDePedidos = PedidoServiceImpl.listarPedidos(
+					fechaInicialStr,fechaFinalStr,
+					idMesa,cliente,estado
+					);
+
 			grid.setItems(listaDePedidos);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -52,6 +69,7 @@ public class PedidosView extends PedidosUI {
 
 	@Override
 	public void onEditar() {
+		/*
 
 		pedido=grid.getValue();
 
@@ -60,6 +78,8 @@ public class PedidosView extends PedidosUI {
 			vistaPedido.setSizeFull();
 			vistaPedido.showDialog(vistaPedido);
 		}
+
+		 */
 	}
 
 	@Override
@@ -69,6 +89,7 @@ public class PedidosView extends PedidosUI {
 
 	@Override
 	public void onImprimirPedido() {
+		/*
 		pedido=grid.getValue();
 
 		if(pedido!=null) {
@@ -88,6 +109,21 @@ public class PedidosView extends PedidosUI {
 			}
 
 		}
+
+		 */
+
+	}
+
+	@Override
+	public Pedido onSeleccionPedido() {
+		/*
+		if(grid.getValue()!=null){
+			return grid.getValue();
+		}
+		return null;
+
+		 */
+		return null;
 
 	}
 

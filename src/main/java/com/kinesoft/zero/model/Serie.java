@@ -29,8 +29,16 @@ public class Serie {
 		this.serie_nueva = serie_nueva;
 		this.operacion = operacion;
 	}
-	
-	
+
+	public Serie(Integer id, String serie) {
+		super();
+		this.id = id;
+		this.serie = serie;
+
+	}
+
+
+
 	public Integer getId() {
 		return id;
 	}

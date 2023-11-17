@@ -16,12 +16,16 @@ public final class MesaServiceImpl extends WindowsView {
 
 	public static List<Mesa> listarMesas(String condicion) throws SQLException {
 
+		try {
+
+
+
 		Connection conexion 		= Server.conectar();
 		Statement state 		= conexion.createStatement();
 		String where 		= " where id is not null";
 		if (condicion != null) {
 
-			where += " and id= " + condicion;
+			where += " and nombre like '%" + condicion+"%' ";
 
 		}
 		
@@ -46,7 +50,9 @@ public final class MesaServiceImpl extends WindowsView {
 
 		conexion.close();
 		return listaDeMesas;
-
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void guardar(Mesa mesa) {

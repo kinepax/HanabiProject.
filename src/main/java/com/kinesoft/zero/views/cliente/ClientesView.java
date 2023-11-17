@@ -31,8 +31,14 @@ public class ClientesView extends ClientesUI {
 
 	@Override
 	public void  onRefrescar() {
+
+
 		try {
-			listaDeClientes = ClienteServiceImpl.listarClientes(null);
+			String dni = txtDni.getValue();
+			String nombre = txtNombre.getValue();
+
+
+			listaDeClientes = ClienteServiceImpl.listarClientes(dni,nombre);
 			grid.setItems(listaDeClientes);
 		} catch (SQLException exepcion) {
 			// TODO Auto-generated catch block

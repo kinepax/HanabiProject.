@@ -2,29 +2,85 @@ package com.kinesoft.zero.views.pedido;
 
 import com.kinesoft.zero.components.GridView;
 import com.kinesoft.zero.components.WindowsView;
+import com.kinesoft.zero.dto.PedidoDTO;
+import com.kinesoft.zero.model.Mesa;
 import com.kinesoft.zero.model.Pedido;
+import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class PedidosUI extends WindowsView {
-	GridView<Pedido> grid = new GridView<>(Pedido.class);
+	GridView<PedidoDTO> grid = new GridView<>(PedidoDTO.class);
 	Button btnAgregar = new Button("Agregar");
 	Button btnEditar = new Button("Editar");
 	Button btnEliminar = new Button("Eliminar");
 	Button btnRefrescar = new Button("Refrescar");
 	Button btnImprimirPedido = new Button("Imprimir Pedido");
+	Button btnOnSeleccionar = new Button("Seleccionar");
 	HorizontalLayout pnlObciones = new HorizontalLayout();
+
+	HorizontalLayout pnlFiltros = new HorizontalLayout();
+	ComboBox<Mesa> chxboxMesa = new ComboBox<>("Mesa");
+	TextField txtCliente = new TextField("Cliente");
+
+	ComboBox<String>chboxEstado= new ComboBox<>("Estados");
+
+	DatePicker fechaInicial = new DatePicker("Fecha Inicial");
+	DatePicker fechaFinal = new DatePicker("Fecha Final");
+
+    Mesa mesa = new Mesa(0,"TODAS");
+
+
 
 
 	public PedidosUI() {
+		initStyles();
 		initData();
 		initListener();
 	}
 
+
+	public void initStyles(){
+
+		pnlFiltros.setAlignItems(Alignment.BASELINE);
+	}
 	public void initData() {
-		pnlObciones.add(btnAgregar, btnEditar, btnEliminar, btnRefrescar,btnImprimirPedido);
-		grid.addComponentColumn(pedido -> {
+		List<Mesa> listaMesas= new ArrayList<>();
+		fechaInicial.setValue(LocalDate.now());
+		fechaFinal.setValue(LocalDate.now());
+
+		chxboxMesa.setItems(new Mesa(0,"TODAS"));
+
+
+		chboxEstado.setItems("PENDIENTE","ATENDIDO","TODOS");
+
+
+
+		try {
+			listaMesas=MesaServiceImpl.listarMesas(null);
+			listaMesas.add(mesa);
+
+			chxboxMesa.setItems(listaMesas);
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		chboxEstado.setValue("TODOS");
+		chxboxMesa.setValue(mesa);
+
+		pnlObciones.add(btnAgregar, btnEditar, btnEliminar,btnImprimirPedido,btnOnSeleccionar);
+		pnlFiltros.add(fechaInicial,fechaFinal, chxboxMesa,txtCliente,chboxEstado,btnRefrescar);
+
+	/*	grid.addComponentColumn(pedido -> {
 			Checkbox chxSeleccion=new Checkbox();
 			chxSeleccion.addValueChangeListener(e->{
 
@@ -42,14 +98,20 @@ public abstract class PedidosUI extends WindowsView {
 
 			return chxSeleccion;
 		});
+
+	 */
 		//grid.setColumns("id", "cliente", "total", "estado","fecha_hora");
 
-		grid.addCol(Pedido::getId,"id");
-		grid.addCol(Pedido::getCliente,"cliente");
-		grid.addCol(Pedido::getEstado,"estado");
-		grid.addCol(Pedido::getFecha_hora,"Fecha y Hora");
+		grid.setSelectionMode(Grid.SelectionMode.MULTI);
 
-		add(pnlObciones, grid);
+		grid.addCol(PedidoDTO::getId,"id");
+		grid.addCol(PedidoDTO::getMesa,"Mesa");
+		grid.addCol(PedidoDTO::getCliente,"Cliente");
+		grid.addCol(PedidoDTO::getEstado,"Estado");
+		grid.addCol(PedidoDTO::getTotal,"Total");
+		grid.addCol(PedidoDTO::getFecha_hora,"Fecha y Hora");
+
+		add(pnlObciones,pnlFiltros, grid);
 
 	}
 
@@ -60,6 +122,14 @@ public abstract class PedidosUI extends WindowsView {
 		btnEditar.addClickListener(e -> onEditar());
 		btnEliminar.addClickListener(e -> onEliminar());
 		btnImprimirPedido.addClickListener(e -> onImprimirPedido());
+		btnOnSeleccionar.addClickListener(e-> onSeleccionPedido());
+
+		fechaInicial.addValueChangeListener(e -> onRefrescar());
+		fechaFinal.addValueChangeListener(e -> onRefrescar());
+
+		chxboxMesa.addValueChangeListener(e -> onRefrescar());
+		chboxEstado.addValueChangeListener(e -> onRefrescar());
+		txtCliente.addKeyUpListener(Key.ENTER, e -> onRefrescar());
 
 	}
 
@@ -76,4 +146,5 @@ public abstract class PedidosUI extends WindowsView {
 
 	public abstract void onImprimirPedido();
 
+	public abstract Pedido onSeleccionPedido();
 }

@@ -15,6 +15,12 @@ public class Cliente {
 		this.dni = dni;
 	}
 
+	public Cliente(Integer id, String nombre) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+
+	}
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}

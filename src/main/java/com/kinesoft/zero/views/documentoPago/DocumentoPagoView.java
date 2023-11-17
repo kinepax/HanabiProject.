@@ -6,6 +6,7 @@ import com.kinesoft.zero.servicesImpl.DocumentoPagoDetalleServiceImpl;
 import com.kinesoft.zero.servicesImpl.DocumentoPagoServiceImpl;
 import com.kinesoft.zero.servicesImpl.SerieServiceImpl;
 import com.kinesoft.zero.views.cliente.ClientesView;
+import com.kinesoft.zero.views.pedido.PedidosView;
 import com.kinesoft.zero.views.producto.ProductosView;
 
 import java.math.BigDecimal;
@@ -45,7 +46,7 @@ public class DocumentoPagoView extends DocumentoPagoUI {
     public void initData(DocumentoPago documentoPago) {
 
         try {
-            listaDeSeries = SerieServiceImpl.listarSeries(null);
+            listaDeSeries = SerieServiceImpl.listarSeries("");
             chboxSerie.setItems(listaDeSeries);
             chboxSerie.setValue(listaDeSeries.get(0));
             onCambiarSerie();
@@ -71,7 +72,7 @@ public class DocumentoPagoView extends DocumentoPagoUI {
         if(cliente != null && !listadeDocumentoPagoDetalle.isEmpty() ){
 
             System.out.println("Los datos estan correctos");
-            String condicionPago= chxPagado.getValue() ? "E" : "C";
+            String condicionPago= chxPagado.getValue() ? "EFECTIVO" : "CREDITO";
             Boolean cancelado=  chxPagado.getValue() ? true : false;
             BigDecimal montoPagado =  chxPagado.getValue() ? new BigDecimal(txtNetoPagar.getValue().toString()) : new BigDecimal(0.0) ;
 
@@ -217,6 +218,53 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
 
         });
+
+
+    }
+
+    @Override
+    public void onSeleccionarPedido() {
+        PedidosView pedidosView = new PedidosView();
+        pedidosView.showDialog(pedidosView);
+
+        Pedido pedido = pedidosView.onSeleccionPedido();
+
+        if(pedido.id!=null){
+            pedidosView.closeDialog();
+            System.out.println(pedido.getCliente().getNombre());
+         }
+        else{
+            System.out.println("no entra al if");
+        }
+
+
+
+
+
+/*
+        //	dataDelGrid.refreshAll();
+
+        ProductosView view = new ProductosView();
+
+        //	vistaSeleccion.setMinWidth("500px");
+        view.setSizeFull();
+
+        view.showDialog(view);
+
+
+        view.btnSeleccionar.addClickListener(e -> {
+            if (view.grid.getValue() != null) {
+                Producto productoSeleccionado = view.grid.getValue();
+
+                if(!listadeDocumentoPagoDetalle.stream().anyMatch(item->item.getProducto().equals(productoSeleccionado))){
+                    agregarDetalleProducto(productoSeleccionado);
+                    id_Detalle++;
+                }
+                view.closeDialog();
+            }
+        });
+
+*/
 
 
     }

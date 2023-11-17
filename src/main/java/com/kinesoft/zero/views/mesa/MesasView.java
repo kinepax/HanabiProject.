@@ -34,8 +34,9 @@ public class MesasView extends MesasUI {
 
 	@Override
 	public void onRefrescar() {
+		String mesa= txtMesa.getValue();
 		try {
-			listaDeMesas = MesaServiceImpl.listarMesas(null);
+			listaDeMesas = MesaServiceImpl.listarMesas(mesa);
 			grid.setItems(listaDeMesas);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

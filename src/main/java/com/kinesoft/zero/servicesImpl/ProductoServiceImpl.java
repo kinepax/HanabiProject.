@@ -23,6 +23,7 @@ public final class ProductoServiceImpl extends WindowsView {
 
 		Connection conexion 				= Server.conectar();
 		Statement state 				= conexion.createStatement();
+
 		ResultSet resultados 				= state.executeQuery("Select * from producto");
 		List<Producto> listadoDeProductos 	= new ArrayList<Producto>();
 
@@ -37,6 +38,37 @@ public final class ProductoServiceImpl extends WindowsView {
 				Integer.parseInt(resultados.getString("stock")))
 					
 								  );
+
+		}
+
+		conexion.close();
+		return listadoDeProductos;
+
+	}
+
+
+	public static List<Producto> listarProductos(String condicion) throws SQLException {
+
+		Connection conexion 				= Server.conectar();
+		Statement state 				= conexion.createStatement();
+		String where 		= " where id is not null";
+			where += " and nombre like '%" + condicion+"%' ";
+
+
+		ResultSet resultados 				= state.executeQuery("Select * from producto "+where);
+		List<Producto> listadoDeProductos 	= new ArrayList<Producto>();
+
+		//Recorre todos los productos
+		while (resultados.next()) {
+
+			listadoDeProductos.add(
+					new Producto(Integer.parseInt(resultados.getString("id")),
+							resultados.getString("nombre"),
+							resultados.getString("descripcion"),
+							BigDecimal.valueOf(Double.parseDouble(resultados.getString("precio"))),
+							Integer.parseInt(resultados.getString("stock")))
+
+			);
 
 		}
 

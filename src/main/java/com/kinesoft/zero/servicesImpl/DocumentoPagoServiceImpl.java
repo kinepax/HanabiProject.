@@ -1,8 +1,10 @@
 package com.kinesoft.zero.servicesImpl;
 
 import com.kinesoft.zero.components.WindowsView;
+import com.kinesoft.zero.model.Cliente;
 import com.kinesoft.zero.model.DocumentoPago;
 import com.kinesoft.zero.model.Serie;
+import com.kinesoft.zero.model.Usuario;
 import com.kinesoft.zero.server.Server;
 
 import java.math.BigDecimal;
@@ -15,7 +17,7 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 	public DocumentoPagoServiceImpl() {
 
 	}
-
+/*
 	public static List<DocumentoPago> listarDocumentosPago() throws SQLException {
 
 		Connection conexion = Server.conectar();
@@ -33,7 +35,7 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 							resultados.getInt("numero"),
 							resultados.getDate("fecha").toLocalDate(),
 							resultados.getString("condicion_pago"),
-							ClienteServiceImpl.listarClientes(resultados.getString("cliente")).get(0),
+							ClienteServiceImpl.listarClientes(resultados.getString("cliente"),null).get(0),
 
 							new BigDecimal(resultados.getString("valor_venta")),
 							new BigDecimal(resultados.getString("igv")),
@@ -57,6 +59,192 @@ public final class DocumentoPagoServiceImpl extends WindowsView {
 		return listaDocumentosPago;
 
 	}
+*/
+
+	public static List<DocumentoPago> listarDocumentosPago() throws SQLException {
+
+		Connection conexion = Server.conectar();
+		Statement state = conexion.createStatement();
+
+
+		String query  = "SELECT d.id as idDocumento,\n" +
+				"s.id as idSerie,\n" +
+				"s.serie ,\n" +
+				"d.numero,\n" +
+				"d.fecha,\n" +
+				"d.condicion_pago,\n" +
+				"c.id as idCliente,\n" +
+				"c.nombre,\n" +
+				"d.valor_venta,\n"+
+				"d.neto_pagar,\n" +
+				"d.igv,\n" +
+				"d.monto_igv,\n" +
+				"d.monto_pagado,\n" +
+				"u.id as idUsuario,\n" +
+				"u.usuario,\n" +
+				"d.estado,\n"+
+				"d.cancelado,\n"+
+				"d.firma_electronica FROM `documento_pago` as d " +
+				"inner join serie as s ON s.id=d.serie " +
+				"inner join cliente as c on c.id=d.cliente " +
+				"inner join usuario as u ON u.id=d.usuario ";
+
+
+		ResultSet resultados = state.executeQuery(query);
+		List<DocumentoPago> listaDocumentosPago = new ArrayList<DocumentoPago>();
+
+		while (resultados.next()) {
+
+			listaDocumentosPago.add(
+					new DocumentoPago(
+							Integer.parseInt(resultados.getString("idDocumento")),
+							//Optiene el nombre del cliente
+							new Serie(
+									resultados.getInt("idSerie"),
+									resultados.getString("serie")
+							),
+						//	SerieServiceImpl.listarSeries(String.valueOf(resultados.getInt("serie"))).get(0),
+							resultados.getInt("numero"),
+							resultados.getDate("fecha").toLocalDate(),
+							resultados.getString("condicion_pago"),
+							new Cliente(
+									resultados.getInt("idCliente"),
+									resultados.getString("nombre")
+							),
+
+						//	ClienteServiceImpl.listarClientes(resultados.getString("cliente"),null).get(0),
+
+							new BigDecimal(resultados.getString("valor_venta")),
+							new BigDecimal(resultados.getString("igv")),
+							new BigDecimal(resultados.getString("monto_igv")),
+							new BigDecimal(resultados.getString("neto_pagar")),
+							resultados.getString("estado"),
+							resultados.getBoolean("cancelado"),
+
+						//	UsuarioServiceImpl.listarUsuarios(resultados.getString("usuario")).get(0),
+							new Usuario(
+									resultados.getInt("idUsuario"),
+									resultados.getString("usuario")
+							),
+
+							new BigDecimal(resultados.getString("monto_pagado")),
+							resultados.getString("firma_electronica")
+
+
+					)
+
+
+			);
+
+		}
+
+		conexion.close();
+		return listaDocumentosPago;
+
+	}
+
+	public static List<DocumentoPago> listarDocumentosPago(
+			String fechaInicial,
+			String fechaFinal,
+			String condicionPago,
+			String cliente
+	) throws SQLException {
+
+
+		String where=" where d.id is not null ";
+		where+="AND d.fecha BETWEEN '"+fechaInicial+" 00:00:00 ' and '"+fechaFinal+" 23:59:59' ";
+
+		where+="AND c.nombre like '%"+cliente+"%' ";
+
+
+		if(!condicionPago.equals("TODOS")){
+			where+=	" AND condicion_pago like '%"+condicionPago+"%' ";
+
+		}
+
+		Connection conexion = Server.conectar();
+		Statement state = conexion.createStatement();
+
+
+		String query  = "SELECT d.id as idDocumento,\n" +
+				"s.id as idSerie,\n" +
+				"s.serie ,\n" +
+				"d.numero,\n" +
+				"d.fecha,\n" +
+				"d.condicion_pago,\n" +
+				"c.id as idCliente,\n" +
+				"c.nombre,\n" +
+				"d.valor_venta,\n"+
+				"d.neto_pagar,\n" +
+				"d.igv,\n" +
+				"d.monto_igv,\n" +
+				"d.monto_pagado,\n" +
+				"u.id as idUsuario,\n" +
+				"u.usuario,\n" +
+				"d.estado,\n"+
+				"d.cancelado,\n"+
+				"d.firma_electronica FROM `documento_pago` as d " +
+				"inner join serie as s ON s.id=d.serie " +
+				"inner join cliente as c on c.id=d.cliente " +
+				"inner join usuario as u ON u.id=d.usuario "+where;
+
+		System.out.println("La consulta es "+query);
+
+
+		ResultSet resultados = state.executeQuery(query);
+		List<DocumentoPago> listaDocumentosPago = new ArrayList<DocumentoPago>();
+
+		while (resultados.next()) {
+
+			listaDocumentosPago.add(
+					new DocumentoPago(
+							Integer.parseInt(resultados.getString("idDocumento")),
+							//Optiene el nombre del cliente
+							new Serie(
+									resultados.getInt("idSerie"),
+									resultados.getString("serie")
+							),
+							//	SerieServiceImpl.listarSeries(String.valueOf(resultados.getInt("serie"))).get(0),
+							resultados.getInt("numero"),
+							resultados.getDate("fecha").toLocalDate(),
+							resultados.getString("condicion_pago"),
+							new Cliente(
+									resultados.getInt("idCliente"),
+									resultados.getString("nombre")
+							),
+
+							//	ClienteServiceImpl.listarClientes(resultados.getString("cliente"),null).get(0),
+
+							new BigDecimal(resultados.getString("valor_venta")),
+							new BigDecimal(resultados.getString("igv")),
+							new BigDecimal(resultados.getString("monto_igv")),
+							new BigDecimal(resultados.getString("neto_pagar")),
+							resultados.getString("estado"),
+							resultados.getBoolean("cancelado"),
+
+							//	UsuarioServiceImpl.listarUsuarios(resultados.getString("usuario")).get(0),
+							new Usuario(
+									resultados.getInt("idUsuario"),
+									resultados.getString("usuario")
+							),
+
+							new BigDecimal(resultados.getString("monto_pagado")),
+							resultados.getString("firma_electronica")
+
+
+					)
+
+
+			);
+
+		}
+
+		conexion.close();
+		return listaDocumentosPago;
+
+	}
+
+
 
 	public static int save(DocumentoPago documentoPago) {
 		Connection con = Server.conectar();

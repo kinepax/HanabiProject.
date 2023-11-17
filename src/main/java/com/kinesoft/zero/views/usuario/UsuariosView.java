@@ -34,8 +34,10 @@ public class UsuariosView extends UsuariosUI {
 
 	@Override
 	public String onRefrescar() {
+		String nombre=txtNombre.getValue();
+		String usuario=txtUsuario.getValue();
 		try {
-			usuarios = UsuarioServiceImpl.listarUsuarios(null);
+			usuarios = UsuarioServiceImpl.listarUsuarios(nombre,usuario);
 			grid.setItems(usuarios);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

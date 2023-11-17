@@ -1,6 +1,7 @@
 package com.kinesoft.zero.servicesImpl;
 
 import com.kinesoft.zero.components.WindowsView;
+import com.kinesoft.zero.dto.PedidoDTO;
 import com.kinesoft.zero.model.Cliente;
 import com.kinesoft.zero.model.Pedido;
 import com.kinesoft.zero.server.Server;
@@ -16,27 +17,35 @@ public final class PedidoServiceImpl extends WindowsView {
 
 	}
 
-	public static List<Pedido> listarPedidos() throws SQLException {
+	public static List<PedidoDTO> listarPedidos() throws SQLException {
+
 
 		Connection conexion 				= Server.conectar();
 		Statement state 					= conexion.createStatement();
-		ResultSet resultados 				= state.executeQuery("Select * from pedido order by id desc");
-		List<Pedido> listaDePedidos 		= new ArrayList<Pedido>();
+		String query="SELECT p.id,c.id as idCliente,c.nombre as cliente," +
+				"m.id as idMesa, m.nombre as mesa ," +
+				"p.total,p.estado, p.fecha_hora " +
+				"FROM `pedido` as p " +
+				"inner join mesa as m ON p.mesa=m.id " +
+				"inner join cliente as c ON p.cliente=c.id; ";
+
+		ResultSet resultados 				= state.executeQuery(query);
+		List<PedidoDTO> listaDePedidos 		= new ArrayList<PedidoDTO>();
 
 		while (resultados.next()) {
 			
 			listaDePedidos.add(
-					new Pedido(
-							
-					Integer.parseInt(resultados.getString("id")),
-					//Optiene el nombre del cliente 
-					ClienteServiceImpl.listarClientes(resultados.getString("cliente")).get(0),
-					 MesaServiceImpl.listarMesas(resultados.getString("mesa")).get(0),
-					new BigDecimal(resultados.getString("total")),
-					
-					resultados.getString("estado"),
-					resultados.getTimestamp("fecha_hora").toLocalDateTime()
-					
+					new PedidoDTO(
+					resultados.getInt("id"),
+							resultados.getInt("idCliente"),
+							resultados.getString("cliente"),
+							resultados.getInt("idMesa"),
+							resultados.getString("mesa"),
+							resultados.getBigDecimal("total"),
+							resultados.getString("estado"),
+							resultados.getTimestamp("fecha_hora").toLocalDateTime()
+
+
 							)
 
 								
@@ -48,6 +57,72 @@ public final class PedidoServiceImpl extends WindowsView {
 		return listaDePedidos;
 
 	}
+
+
+	public static List<PedidoDTO> listarPedidos(String fechaInicial,String fechaFinal,
+												Integer idMesa,
+												String cliente,
+												String estado
+
+												) throws SQLException {
+
+
+		Connection conexion 				= Server.conectar();
+		Statement state 					= conexion.createStatement();
+		String where=" where p.id is not null ";
+			where+="AND p.fecha_hora BETWEEN '"+fechaInicial+" 00:00:00 ' and '"+fechaFinal+" 23:59:59' ";
+
+		where+="AND c.nombre like '%"+cliente+"%' ";
+			if(idMesa!=0){
+			where+=	"AND m.id = "+idMesa;
+
+			}
+
+		if(!estado.equals("TODOS")){
+			where+=	" AND estado like '%"+estado+"%' ";
+
+		}
+
+		where+="  order by p.id desc";
+
+		String query="SELECT p.id,c.id as idCliente,c.nombre as cliente," +
+				"m.id as idMesa, m.nombre as mesa ," +
+				"p.total,p.estado, p.fecha_hora " +
+				"FROM `pedido` as p " +
+				"inner join mesa as m ON p.mesa=m.id " +
+				"inner join cliente as c ON p.cliente=c.id  "+where;
+
+		System.out.println("la consulta es "+query);
+
+		ResultSet resultados 				= state.executeQuery(query);
+		List<PedidoDTO> listaDePedidos 		= new ArrayList<PedidoDTO>();
+
+		while (resultados.next()) {
+
+			listaDePedidos.add(
+					new PedidoDTO(
+							resultados.getInt("id"),
+							resultados.getInt("idCliente"),
+							resultados.getString("cliente"),
+							resultados.getInt("idMesa"),
+							resultados.getString("mesa"),
+							resultados.getBigDecimal("total"),
+							resultados.getString("estado"),
+							resultados.getTimestamp("fecha_hora").toLocalDateTime()
+
+
+					)
+
+
+			);
+
+		}
+
+		conexion.close();
+		return listaDePedidos;
+
+	}
+
 
 	public static int save(Pedido pedido) {
 		Connection con = Server.conectar();

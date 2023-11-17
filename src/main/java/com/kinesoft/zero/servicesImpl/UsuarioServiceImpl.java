@@ -85,6 +85,35 @@ public  abstract class UsuarioServiceImpl  {
 
 	}
 
+	public static List<Usuario> listarUsuarios(String nombre,String usuario) throws SQLException {
+
+		Connection conexion 		= Server.conectar();
+		Statement state 			= conexion.createStatement();
+		String where 				= " where id is not null";
+			where+=" and nombre like '%"+nombre+"%' "+
+					" and usuario like '%"+usuario+"%' ";
+
+
+		ResultSet resultados			= state.executeQuery("Select * from usuario " + where);
+		List<Usuario> listaDeUsuarios   = new ArrayList<Usuario>();
+
+		while (resultados.next()) {
+			listaDeUsuarios.add(
+					new Usuario(
+							Integer.parseInt(resultados.getString("id")),
+							resultados.getString("nombre"),
+							resultados.getString("usuario"),
+							resultados.getString("pass")
+					)
+			);
+
+		}
+
+		conexion.close();
+		return listaDeUsuarios;
+
+	}
+
 	public static void guardar(Usuario usuario) {
 		Connection conexion = Server.conectar();
 		try {
@@ -113,6 +142,8 @@ public  abstract class UsuarioServiceImpl  {
 			procedimientoActualizarUsuario.setString(1, usuario.getNombre());
 			procedimientoActualizarUsuario.setString(2, usuario.getUsuario());
 			procedimientoActualizarUsuario.setString(3, usuario.getPass());
+			procedimientoActualizarUsuario.setInt	(4, usuario.getId());
+
 			procedimientoActualizarUsuario.executeUpdate();
 
 		} catch (SQLException exepcion) {
