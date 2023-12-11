@@ -15,6 +15,9 @@ public  class Mesa {
 		this.id = id;
 		this.nombre = nombre;
 	}
+	public Mesa(Integer id) {
+		this.id = id;
+	}
 
 	@Override
 	public int hashCode() {

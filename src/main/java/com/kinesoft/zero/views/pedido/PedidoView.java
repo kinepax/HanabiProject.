@@ -1,6 +1,7 @@
 package com.kinesoft.zero.views.pedido;
 
 import com.kinesoft.zero.components.WindowsView;
+import com.kinesoft.zero.listener.PedidoEvents;
 import com.kinesoft.zero.model.*;
 import com.kinesoft.zero.servicesImpl.*;
 import com.kinesoft.zero.views.cliente.ClientesView;
@@ -13,12 +14,17 @@ import java.util.List;
 
 public class PedidoView extends PedidoUI {
 
+	PedidosView pedidosView;
 	List<ItemVenta> listaDeItemsVenta 						= new ArrayList<>();
 	ItemVenta itemVenta 							= new ItemVenta();
 	Cliente cliente;
 	Mesa mesa;
 	List<Mesa> listaDeMesas 						= new ArrayList<>();
 	List<Cliente>listaDeClientes					= new ArrayList<>();
+
+
+	private PedidoEvents pedidoEvents = new PedidoEvents();
+
 	public boolean save;
 
 	public PedidoView() {		
@@ -29,7 +35,15 @@ public class PedidoView extends PedidoUI {
 		this.save = pedido == null;
 		initData(pedido);
 	}
-	
+
+	public void setPedidosView(PedidosView pedidosView){
+		this.pedidosView=pedidosView;
+		setPedidoViewListener(this.pedidosView);
+
+	}
+	public void  setPedidoViewListener(PedidosView pedidosView){
+		pedidoEvents.setEventsListener(pedidosView);
+	}
 
 	 
 
@@ -43,6 +57,9 @@ public class PedidoView extends PedidoUI {
 		
 		if (save) {
 			try {
+				cliente = ClienteServiceImpl.listarClientesId(1).get(0);
+				txtCliente.setValue(cliente.getNombre());
+
 				listaDeItemsVenta = ItemVentaServiceImpl.listaDeItemsEnVenta();
 				listaDeMesas= MesaServiceImpl.listarMesas(null);
 				
@@ -66,10 +83,13 @@ public class PedidoView extends PedidoUI {
 		
 			
 		}
+		else {
 
-		//Ver pedido ya hecho
-		
-		onCargarPedido(pedido);
+			//Ver pedido ya hecho
+
+			onCargarPedido(pedido);
+
+		}
 
 	}
 
@@ -78,12 +98,14 @@ public class PedidoView extends PedidoUI {
 	@Override
 	public void onCargarPedido(Pedido pedido) {
 		try {
+			int idMesa=pedido.getIdMesa();
+			int idCliente= pedido.getCliente().getId();
+			System.out.println("el  id del pedido es "+idCliente);
+
+			listaDeMesas= MesaServiceImpl.listaMesaId(idMesa);
+			cliente=ClienteServiceImpl.listarClientesId(idCliente).get(0);
 			
-			System.out.println("el  id del pedido es "+pedido.getId().toString());
-			listaDeMesas= MesaServiceImpl.listarMesas(String.valueOf(pedido.getIdMesa()));
-			listaDeClientes=ClienteServiceImpl.listarClientes(String.valueOf(pedido.getCliente().getId()),null);
-			
-			txtCliente.setValue(listaDeClientes.get(0).getNombre());
+			txtCliente.setValue(cliente.getNombre());
 			txtCliente.setEnabled(false);
 			
 			comboMesas.setItems(listaDeMesas);
@@ -124,12 +146,13 @@ public class PedidoView extends PedidoUI {
 
 	@Override
 	public String onSave() {
-		mesa=comboMesas.getValue();
+
 		
 		
-		if(!cliente.equals(null) && !mesa.equals(null)) {
-			
-			
+		if(!cliente.equals(null) && comboMesas.getValue()!=null && Double.valueOf(onTotal())>0.0) {
+
+			mesa=comboMesas.getValue();
+
 			WindowsView.ConfirmarListener view= respuesta -> {
 
 				   if (respuesta) {
@@ -177,6 +200,8 @@ public class PedidoView extends PedidoUI {
 								alerta.setWidth("10px");
 								alerta.onError("Se grabo correctamente");
 
+								pedidoEvents.notifySavePedido();
+
 
 								closeDialog();
 
@@ -217,7 +242,7 @@ public class PedidoView extends PedidoUI {
 			WindowsView alerta = new WindowsView();
 			alerta.setHeight("10px");
 			alerta.setWidth("10px");
-			alerta.onError("Tienes que ingresar una mesa y un cliente");		
+			alerta.onError("Tienes que ingresar una mesa , un cliente y productos");
 			
 		}
 		
@@ -257,7 +282,7 @@ public class PedidoView extends PedidoUI {
 
 		//System.out.println("El valor total de el dinero es "+totalDinero);
 		//this.grid.getDataProvider().refreshAll();
-		columnaTotales.setFooter(""+totalDinero);
+		columnaTotales.setFooter("S/"+totalDinero);
 
 		return ""+totalDinero;
 

@@ -1,5 +1,6 @@
 package com.kinesoft.zero.views.serie;
 
+import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Serie;
 import com.kinesoft.zero.model.Usuario;
 import com.kinesoft.zero.servicesImpl.SerieServiceImpl;
@@ -47,37 +48,37 @@ public class SerieView extends  SerieUI{
 
     @Override
     public String onSave() {
+        WindowsView.ConfirmarListener view = respuesta -> {
 
-        serie.setSerie(txtSerie.getValue());
-        serie.setUsuario(new Usuario(1,"Paulo","kinepax","123456"));
-
-
-
-
-        if(!save) {
-         //   serie.setId(Integer.parseInt( txtId.getText()));
-            serie.setSerie_anterior(serie.getSerie_nueva());
-            serie.setSerie_nueva(txtSerie.getValue());
+            if(respuesta){
             serie.setSerie(txtSerie.getValue());
+            serie.setUsuario(new Usuario(1, "Paulo", "kinepax", "123456"));
 
 
-            System.out.println(serie.getSerie_anterior()+"el valor anterior era ");
-            System.out.println(serie.getSerie_nueva()+"el valor nuevo era ");
-
-            serie_service.edit(serie);
-            this.closeDialog();
-
-        }
-        else {
-
-            serie.setSerie_anterior(txtSerie.getValue());
-            serie.setSerie_nueva(txtSerie.getValue());
-            serie_service.save(serie);
-            this.closeDialog();
+            if (!save) {
+                //   serie.setId(Integer.parseInt( txtId.getText()));
+                serie.setSerie_anterior(serie.getSerie_nueva());
+                serie.setSerie_nueva(txtSerie.getValue());
+                serie.setSerie(txtSerie.getValue());
 
 
-        }
+                System.out.println(serie.getSerie_anterior() + "el valor anterior era ");
+                System.out.println(serie.getSerie_nueva() + "el valor nuevo era ");
 
+                serie_service.edit(serie);
+                this.closeDialog();
+
+            } else {
+
+                serie.setSerie_anterior(txtSerie.getValue());
+                serie.setSerie_nueva(txtSerie.getValue());
+                serie_service.save(serie);
+                this.closeDialog();
+
+
+            }
+        }};
+        WindowsView.onPreguntarGrabar("¿Está seguro de que desea continuar?", view);
 
 
         return null;

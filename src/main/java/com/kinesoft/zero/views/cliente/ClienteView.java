@@ -1,5 +1,6 @@
 package com.kinesoft.zero.views.cliente;
 
+import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Cliente;
 
 import com.kinesoft.zero.servicesImpl.ClienteServiceImpl;
@@ -42,20 +43,30 @@ public class ClienteView extends ClienteUI {
 
 	@Override
 	public void onSave() {
-		cliente.setNombre(txtNombre.getValue());
-		cliente.setDni(String.valueOf(txtDni.getValue()));
 
-		if (!save) {
-			cliente.setId(Integer.parseInt(txtId.getText()));
+		WindowsView.ConfirmarListener view = respuesta -> {
 
-			ClienteServiceImpl.editar(cliente);
-			this.closeDialog();
+			if(respuesta){
+				cliente.setNombre(txtNombre.getValue());
+				cliente.setDni(String.valueOf(txtDni.getValue()));
 
-		} else {
-			ClienteServiceImpl.guardar(cliente);
-			this.closeDialog();
+				if (!save) {
+					cliente.setId(Integer.parseInt(txtId.getText()));
 
-		}
+					ClienteServiceImpl.editar(cliente);
+					this.closeDialog();
+
+				} else {
+					ClienteServiceImpl.guardar(cliente);
+					this.closeDialog();
+
+				}
+
+			}
+
+		};
+		WindowsView.onPreguntarGrabar("¿Está seguro de que desea continuar?", view);
+
 
 
 	}

@@ -1,5 +1,6 @@
 package com.kinesoft.zero.views.mesa;
 
+import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Mesa;
 import com.kinesoft.zero.servicesImpl.MesaServiceImpl;
 
@@ -42,21 +43,32 @@ public class MesaView extends MesaUI {
 
 	@Override
 	public String onSave() {
-		mesa.setNombre(txtNombre.getValue());
-	
+
+		WindowsView.ConfirmarListener view = respuesta -> {if(respuesta){
+			mesa.setNombre(txtNombre.getValue());
 
 
-		if (!save) {
-			mesa.setId(Integer.parseInt(txtId.getText()));
 
-			servicio.editar(mesa);
-			this.closeDialog();
+			if (!save) {
+				mesa.setId(Integer.parseInt(txtId.getText()));
 
-		} else {
-			servicio.guardar(mesa);
-			this.closeDialog();
+				servicio.editar(mesa);
+				this.closeDialog();
+
+			} else {
+				servicio.guardar(mesa);
+				this.closeDialog();
+
+			}
 
 		}
+
+		};
+		WindowsView.onPreguntarGrabar("¿Está seguro de que desea continuar?", view);
+
+
+
+
 
 		return null;
 

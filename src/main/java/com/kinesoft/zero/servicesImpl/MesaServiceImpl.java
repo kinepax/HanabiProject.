@@ -55,6 +55,47 @@ public final class MesaServiceImpl extends WindowsView {
 		}
 	}
 
+	public static List<Mesa> listaMesaId(Integer id) throws SQLException {
+
+		try {
+
+
+
+			Connection conexion 		= Server.conectar();
+			Statement state 		= conexion.createStatement();
+			String where 		= " where id is not null";
+			if (id != null) {
+
+				where += " and id=" + id+"";
+
+			}
+
+			String query="Select * from mesa " + where;
+
+			System.out.println(query);
+
+			ResultSet resultados = state.executeQuery(query);
+			List<Mesa> listaDeMesas = new ArrayList<Mesa>();
+
+			while (resultados.next())
+			{
+				listaDeMesas.add(
+						new Mesa(
+								Integer.parseInt(resultados.getString("id")),
+								resultados.getString("nombre")
+						)
+
+				);
+
+			}
+
+			conexion.close();
+			return listaDeMesas;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public void guardar(Mesa mesa) {
 		Connection conexion = Server.conectar();
 		try {

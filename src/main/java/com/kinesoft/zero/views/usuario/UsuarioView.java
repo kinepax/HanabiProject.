@@ -1,5 +1,6 @@
 package com.kinesoft.zero.views.usuario;
 
+import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Mesa;
 import com.kinesoft.zero.model.Usuario;
 import com.kinesoft.zero.model.Usuario_Mesas;
@@ -74,22 +75,27 @@ public class UsuarioView extends UsuarioUI {
 
 	@Override
 	public String onSave() {
-		user.setNombre(txtNombre.getValue());
-		user.setUsuario(txtUsuario.getValue());
-		user.setPass(txtPass.getValue());
+		WindowsView.ConfirmarListener view = respuesta -> {
+			if(respuesta) {
+				user.setNombre(txtNombre.getValue());
+				user.setUsuario(txtUsuario.getValue());
+				user.setPass(txtPass.getValue());
 
 
-		if (!save) {
-			user.setId(Integer.parseInt(txtId.getText()));
+				if (!save) {
+					user.setId(Integer.parseInt(txtId.getText()));
 
-			UsuarioServiceImpl.editar(user);
-			this.closeDialog();
+					UsuarioServiceImpl.editar(user);
+					this.closeDialog();
 
-		} else {
-			UsuarioServiceImpl.guardar(user);
-			this.closeDialog();
+				} else {
+					UsuarioServiceImpl.guardar(user);
+					this.closeDialog();
 
-		}
+				}
+			}};
+		WindowsView.onPreguntarGrabar("¿Está seguro de que desea continuar?", view);
+
 
 		return null;
 

@@ -61,6 +61,8 @@ public abstract class DocumentoPagoUI extends WindowsView {
 	TextField txtMontoIgv = new TextField("Monto Igv");
 	TextField txtNetoPagar = new TextField("Neto Pagar");
 
+	TextField txtPagado = new TextField("Monto Pagado");
+
 
 	Button btnGrabar = new Button("Grabar");
 	Button btnCerrar = new Button("Cerrar");

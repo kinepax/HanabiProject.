@@ -2,6 +2,7 @@ package com.kinesoft.zero.views.producto;
 
 import java.math.BigDecimal;
 
+import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Producto;
 import com.kinesoft.zero.servicesImpl.ProductoServiceImpl;
 
@@ -52,24 +53,31 @@ public class ProductoView extends ProductoUI {
 
 	@Override
 	public String onSave() {
-		product.setNombre(txtNombre.getValue());
-		product.setDescripcion(txtDescripcion.getValue());
-		product.setPrecio(new BigDecimal(txtPrecio.getValue()));
-		product.setStock(Integer.parseInt(txtStock.getValue()));
-		if(!save) {
-			product.setId(Integer.parseInt( txtId.getText()));
 
-			servicio.editar(product);
-			this.closeDialog();
-		
-		}
-		else {
-			servicio.guardar(product);
-			this.closeDialog();
+		WindowsView.ConfirmarListener view = respuesta -> {
+			if (respuesta) {
 
-			
-		}
-		
+				product.setNombre(txtNombre.getValue());
+				product.setDescripcion(txtDescripcion.getValue());
+				product.setPrecio(new BigDecimal(txtPrecio.getValue()));
+				product.setStock(Integer.parseInt(txtStock.getValue()));
+				if (!save) {
+					product.setId(Integer.parseInt(txtId.getText()));
+
+					servicio.editar(product);
+					this.closeDialog();
+
+				} else {
+					servicio.guardar(product);
+					this.closeDialog();
+
+
+				}
+			}
+		};
+
+		WindowsView.onPreguntarGrabar("¿Está seguro de que desea continuar?", view);
+
 
 		return null;
 	

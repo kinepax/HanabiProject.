@@ -14,6 +14,10 @@ public class Pedido {
 	public String estado;
 	public LocalDateTime fecha_hora;
 
+	public Pedido(Integer id) {
+		this.id = id;
+
+	}
 	public Pedido(Integer id, Cliente cliente,Mesa mesa, BigDecimal total, String estado,LocalDateTime fecha_hora) {
 		super();
 		this.id = id;
@@ -30,6 +34,14 @@ public class Pedido {
 		this.mesa= mesa;
 		this.total = total;
 		this.estado = estado;
+	}
+
+	//id de mesa y id de cliente y id de pedido
+	public Pedido( Integer id, Integer idCliente,Integer idMesa) {
+		this.id = id;
+		this.cliente = new Cliente(idCliente);
+		this.mesa = new Mesa(idMesa);
+
 	}
 
 	public Pedido() {

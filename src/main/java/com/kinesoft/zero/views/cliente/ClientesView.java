@@ -1,5 +1,6 @@
 package com.kinesoft.zero.views.cliente;
 
+import com.kinesoft.zero.components.WindowsView;
 import com.kinesoft.zero.model.Cliente;
 import com.kinesoft.zero.servicesImpl.ClienteServiceImpl;
 
@@ -7,10 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientesView extends ClientesUI {
+public class ClientesView extends ClientesUI implements WindowsView.ConfirmarListener {
 
-	List<Cliente> listaDeClientes 				= new ArrayList<>();
-	Cliente cliente 							= new Cliente();
+	List<Cliente> listaDeClientes = new ArrayList<>();
+	Cliente cliente = new Cliente();
+
 	public ClientesView() {
 		iniData();
 
@@ -21,16 +23,17 @@ public class ClientesView extends ClientesUI {
 	}
 
 	@Override
-	public  void onadd() {
+	public void onadd() {
+	//	Broadcaster.broadcast("¡Nuevo pedido!");
 		ClienteView vistaCliente = new ClienteView();
-		
-		
+
+
 		vistaCliente.setSizeFull();
 		vistaCliente.showDialog(vistaCliente);
 	}
 
 	@Override
-	public void  onRefrescar() {
+	public void onRefrescar() {
 
 
 		try {
@@ -38,7 +41,7 @@ public class ClientesView extends ClientesUI {
 			String nombre = txtNombre.getValue();
 
 
-			listaDeClientes = ClienteServiceImpl.listarClientes(dni,nombre);
+			listaDeClientes = ClienteServiceImpl.listarClientes(dni, nombre);
 			grid.setItems(listaDeClientes);
 		} catch (SQLException exepcion) {
 			// TODO Auto-generated catch block
@@ -74,6 +77,13 @@ public class ClientesView extends ClientesUI {
 	@Override
 	public void onSeleccionar() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void onConfirmacionSeleccionada(boolean respuesta) {
+		System.out.println("El valor recibio fue MIRAMEEEEEEEE "+respuesta);
+		onRefrescar();
 	}
 }
+

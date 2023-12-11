@@ -15,8 +15,14 @@ public  class WindowsView extends VerticalLayout   {
 	 public interface ConfirmarListener {
 			 void onConfirmacionSeleccionada(boolean respuesta);
 
+
 		}
-	 
+	@FunctionalInterface
+	public interface GuardadoListener {
+		void onguardadoListner(boolean respuesta);
+
+	}
+
 	public void initListener() {
 
 	

@@ -57,6 +57,8 @@ public class MesasView extends MesasUI {
 
 	@Override
 	public void onEliminar() {
+
+
 		mesa = grid.getValue();
 		try {
 			MesaServiceImpl.eliminar(mesa);

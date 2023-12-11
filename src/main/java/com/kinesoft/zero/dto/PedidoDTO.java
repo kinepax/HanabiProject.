@@ -2,6 +2,7 @@ package com.kinesoft.zero.dto;
 
 import com.kinesoft.zero.model.Cliente;
 import com.kinesoft.zero.model.Mesa;
+import com.vaadin.flow.component.button.Button;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ public class PedidoDTO {
     public BigDecimal total;
     public String estado;
     public LocalDateTime fecha_hora;
+
 
 
     public PedidoDTO(Integer id, Integer idCliente, String cliente, Integer idMesa, String mesa, BigDecimal total, String estado, LocalDateTime fecha_hora) {

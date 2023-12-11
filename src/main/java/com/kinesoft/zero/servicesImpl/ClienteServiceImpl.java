@@ -30,10 +30,35 @@ public  abstract class  ClienteServiceImpl extends WindowsView {
 				listaDeClientes.add(
 					new Cliente(
 								Integer.parseInt(resultados.getString("id")),
-								resultados.getString("nombre"), 
+								resultados.getString("nombre"),
 								resultados.getString("dni")));
 
-		}	
+		}
+
+		conexion.close();
+		return listaDeClientes;
+
+	}
+
+	public static List<Cliente> listarClientesId(Integer id) throws SQLException {
+
+		Connection conexion 		= Server.conectar();
+		Statement state 		= conexion.createStatement();
+		String where 		= " where id is not null";
+			where+=" and id="+id+"";
+
+
+		ResultSet resultados = state.executeQuery("Select * from cliente " + where);
+		List<Cliente> listaDeClientes = new ArrayList<Cliente>();
+
+		while (resultados.next()) {
+			listaDeClientes.add(
+					new Cliente(
+							Integer.parseInt(resultados.getString("id")),
+							resultados.getString("nombre"),
+							resultados.getString("dni")));
+
+		}
 
 		conexion.close();
 		return listaDeClientes;

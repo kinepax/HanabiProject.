@@ -41,6 +41,8 @@ public abstract class PedidoUI extends WindowsView {
 
 	public void initDataUI() {
 
+		txtCliente.setEnabled(false);
+
 		pnlObciones.add(
 						btnCliente,
 						txtCliente,

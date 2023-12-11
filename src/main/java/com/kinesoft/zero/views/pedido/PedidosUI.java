@@ -19,14 +19,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PedidosUI extends WindowsView {
-	GridView<PedidoDTO> grid = new GridView<>(PedidoDTO.class);
+public abstract class PedidosUI extends WindowsView  {
+	public GridView<PedidoDTO> grid = new GridView<>(PedidoDTO.class);
 	Button btnAgregar = new Button("Agregar");
 	Button btnEditar = new Button("Editar");
 	Button btnEliminar = new Button("Eliminar");
-	Button btnRefrescar = new Button("Refrescar");
+	 Button btnRefrescar = new Button("Refrescar");
 	Button btnImprimirPedido = new Button("Imprimir Pedido");
-	Button btnOnSeleccionar = new Button("Seleccionar");
+	public Button btnOnSeleccionar = new Button("Seleccionar");
 	HorizontalLayout pnlObciones = new HorizontalLayout();
 
 	HorizontalLayout pnlFiltros = new HorizontalLayout();
@@ -55,6 +55,7 @@ public abstract class PedidosUI extends WindowsView {
 		pnlFiltros.setAlignItems(Alignment.BASELINE);
 	}
 	public void initData() {
+		btnEliminar.setEnabled(false);
 		List<Mesa> listaMesas= new ArrayList<>();
 		fechaInicial.setValue(LocalDate.now());
 		fechaFinal.setValue(LocalDate.now());
@@ -62,7 +63,7 @@ public abstract class PedidosUI extends WindowsView {
 		chxboxMesa.setItems(new Mesa(0,"TODAS"));
 
 
-		chboxEstado.setItems("PENDIENTE","ATENDIDO","TODOS");
+		chboxEstado.setItems("PENDIENTE","ATENDIDO","FACTURADO","TODOS");
 
 
 
@@ -111,6 +112,11 @@ public abstract class PedidosUI extends WindowsView {
 		grid.addCol(PedidoDTO::getTotal,"Total");
 		grid.addCol(PedidoDTO::getFecha_hora,"Fecha y Hora");
 
+		grid.addComponentColumn(pedidoDTO -> {
+		return onOperacion(pedidoDTO);
+
+		});
+
 		add(pnlObciones,pnlFiltros, grid);
 
 	}
@@ -134,6 +140,8 @@ public abstract class PedidosUI extends WindowsView {
 	}
 
 	public abstract void onCheckSeleccion();
+
+	public abstract Button onOperacion(PedidoDTO pedidoDTO);
 
 
 	public abstract void onadd();

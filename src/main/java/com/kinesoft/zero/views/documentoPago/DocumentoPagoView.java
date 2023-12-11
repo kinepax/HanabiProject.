@@ -1,13 +1,17 @@
 package com.kinesoft.zero.views.documentoPago;
 
 import com.kinesoft.zero.components.WindowsView;
+import com.kinesoft.zero.dto.PedidoDTO;
+import com.kinesoft.zero.listener.PedidoEvents;
 import com.kinesoft.zero.model.*;
 import com.kinesoft.zero.servicesImpl.DocumentoPagoDetalleServiceImpl;
 import com.kinesoft.zero.servicesImpl.DocumentoPagoServiceImpl;
+import com.kinesoft.zero.servicesImpl.PedidoDetalleServiceImpl;
 import com.kinesoft.zero.servicesImpl.SerieServiceImpl;
 import com.kinesoft.zero.views.cliente.ClientesView;
 import com.kinesoft.zero.views.pedido.PedidosView;
 import com.kinesoft.zero.views.producto.ProductosView;
+import com.vaadin.flow.component.page.Push;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -17,6 +21,7 @@ import java.util.List;
 
 public class DocumentoPagoView extends DocumentoPagoUI {
 
+    private PedidoEvents pedidoEvents = new PedidoEvents();
 
     List<ItemVenta> listaDeItemsVenta = new ArrayList<>();
 
@@ -31,6 +36,7 @@ public class DocumentoPagoView extends DocumentoPagoUI {
     Integer correlativoSerie;
     List<Cliente> listaDeClientes = new ArrayList<>();
 
+    Pedido pedido ;
     public Integer id_Detalle = 1;
     public boolean save;
 
@@ -43,7 +49,30 @@ public class DocumentoPagoView extends DocumentoPagoUI {
     }
 
 
+    public DocumentoPagoView(PedidoDTO pedidoDTO,Boolean estado,PedidosView pedidosView) {
+
+        pedidoEvents.setEventsListener(pedidosView);
+
+        pedido = new Pedido(pedidoDTO.getId());
+        cliente = new Cliente(pedidoDTO.getIdCliente(), pedidoDTO.getCliente());
+        txtCliente.setText(cliente.getNombre());
+
+        initData(null);
+        btnProducto.setEnabled(false);
+        btnCliente.setEnabled(false);
+        btnImportarPedido.setEnabled(false);
+
+        agregarDetallePedido(pedido);
+
+
+
+
+
+    }
+
+
     public void initData(DocumentoPago documentoPago) {
+
 
         try {
             listaDeSeries = SerieServiceImpl.listarSeries("");
@@ -58,6 +87,7 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
 
     }
+
 
 
     @Override
@@ -128,9 +158,11 @@ public class DocumentoPagoView extends DocumentoPagoUI {
                     alerta.setHeight("10px");
                     alerta.setWidth("10px");
                     alerta.onError("Se grabo correctamente");
-
+                    pedidoEvents.notifySaveDocumentoPago(pedido.getId());
 
                     closeDialog();
+
+
 
 
                 }
@@ -226,45 +258,68 @@ public class DocumentoPagoView extends DocumentoPagoUI {
     public void onSeleccionarPedido() {
         PedidosView pedidosView = new PedidosView();
         pedidosView.showDialog(pedidosView);
-
-        Pedido pedido = pedidosView.onSeleccionPedido();
-
-        if(pedido.id!=null){
-            pedidosView.closeDialog();
-            System.out.println(pedido.getCliente().getNombre());
-         }
-        else{
-            System.out.println("no entra al if");
-        }
-
-
-
+        pedidosView.btnOnSeleccionar.addClickListener(e -> {
+            if (pedidosView.grid.getValue() != null) {
+                PedidoDTO pedidoSeleccionado = pedidosView.grid.getValue();
+                Pedido pedido = new Pedido(pedidoSeleccionado.getId());
+                agregarDetallePedido(pedido);
 
 
 /*
-        //	dataDelGrid.refreshAll();
+                if(!listadeDocumentoPagoDetalle.stream().anyMatch(item->item.getProducto().equals(pedidoSeleccionado))){
 
-        ProductosView view = new ProductosView();
+                   // agregarDetalleProducto(pedidoSeleccionado);
+                 //   id_Detalle++;
 
-        //	vistaSeleccion.setMinWidth("500px");
-        view.setSizeFull();
-
-        view.showDialog(view);
-
-
-        view.btnSeleccionar.addClickListener(e -> {
-            if (view.grid.getValue() != null) {
-                Producto productoSeleccionado = view.grid.getValue();
-
-                if(!listadeDocumentoPagoDetalle.stream().anyMatch(item->item.getProducto().equals(productoSeleccionado))){
-                    agregarDetalleProducto(productoSeleccionado);
-                    id_Detalle++;
                 }
-                view.closeDialog();
+
+                */
+
+                pedidosView.closeDialog();
+
+
+
             }
+
+
         });
 
-*/
+
+    }
+    public void agregarDetallePedido(Pedido pedido) {
+
+
+        try {
+            List<PedidoDetalle> pedidoDetalleList = PedidoDetalleServiceImpl.listarDetallesDePedido(pedido);
+            for(PedidoDetalle pedidoDetalle:pedidoDetalleList){
+
+                DocumentoPagoDetalle nuevoDetalle = new DocumentoPagoDetalle(
+                        id_Detalle,
+                        pedidoDetalle.getProducto(),
+                        pedidoDetalle.getCantidad(),
+                        pedidoDetalle.getProducto().getPrecio(),
+                        pedidoDetalle.getTotal(),
+
+                        documentoPagoDetalleGridView
+                );
+                nuevoDetalle.numerText.setEnabled(false);
+
+
+                dataDelGrid.addItem(nuevoDetalle);
+
+                id_Detalle++;  // Incrementa el id_Detalle después de agregar el detalle
+                onTotal();
+
+            }
+
+
+
+
+        } catch (SQLException ex) {
+
+            throw new RuntimeException(ex);
+        }
+
 
 
     }
@@ -283,14 +338,14 @@ public class DocumentoPagoView extends DocumentoPagoUI {
 
 
         dataDelGrid.addItem(nuevoDetalle);
-    //    nuevoDetalle.setNumerText(new NumerText());
-      //  nuevoDetalle.getNumerText().setValue(1.0);
 
-        //	documentoPagoDetalleGridView.getDataProvider().refreshAll();
         id_Detalle++;  // Incrementa el id_Detalle después de agregar el detalle
         onTotal();
 
     }
+
+
+
 
     @Override
     public void onCambiarSerie() {

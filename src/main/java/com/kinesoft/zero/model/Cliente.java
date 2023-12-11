@@ -21,6 +21,10 @@ public class Cliente {
 		this.nombre = nombre;
 
 	}
+	public Cliente(Integer id) {
+		this.id = id;
+
+	}
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}

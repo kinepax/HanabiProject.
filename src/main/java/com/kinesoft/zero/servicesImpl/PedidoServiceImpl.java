@@ -152,7 +152,23 @@ public final class PedidoServiceImpl extends WindowsView {
 		return 0;
 
 	}
+	public static  void actualizarEstado(String estado,int id) {
+		Connection con = Server.conectar();
+		try {
+			PreparedStatement psIsertar = con
+					.prepareStatement("update   pedido " + " set estado=? " + " where id=?");
+			psIsertar.setString(1, estado);
+			psIsertar.setInt(2, id);
 
+			psIsertar.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+
+		}
+
+	}
 	public void edit(Cliente client) {
 		Connection con = Server.conectar();
 		try {
